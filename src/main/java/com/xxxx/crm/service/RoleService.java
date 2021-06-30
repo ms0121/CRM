@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -60,7 +61,31 @@ public class RoleService extends BaseService<Role, Integer> {
         AssertUtil.isTrue(roleMapper.insertSelective(role) < 1, "角色添加失败!");
     }
 
+    /**
+     * 更新角色
+     *  1.参数校验
+     *      角色ID   非空，并且数据唯一
+     *      角色名称  非空，角色唯一
+     *  2.设置参数的默认值
+     *      修改时间
+     *  3.执行更新操作，判断受影响的行数
+     * @param role
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateRole(Role role){
+        // 1. 参数校验
+        AssertUtil.isTrue(role.getId() == null, "角色不存在!");
+        // 根据角色的id查询数据库中的用户信息
+        Role temp = roleMapper.selectByPrimaryKey(role.getId());
+        AssertUtil.isTrue(temp == null, "待更新记录不存在!");
+        // 判断修改后的角色名称是否存在
+        AssertUtil.isTrue(StringUtils.isBlank(role.getRoleName()), "角色用户名称不能为空!");
+        // 判断修改后的名称是否已存在
+        AssertUtil.isTrue(role.getRoleName().equals(temp.getRoleName()), "角色用户名已存在，请重试!");
 
-
-
+        // 2. 修改参数的默认值
+        role.setUpdateDate(new Date());
+        // 执行修改的操作
+        AssertUtil.isTrue(roleMapper.updateByPrimaryKeySelective(role) < 1, "角色修改失败!");
+    }
 }

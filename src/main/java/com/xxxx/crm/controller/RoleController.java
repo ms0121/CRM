@@ -71,6 +71,19 @@ public class RoleController extends BaseController {
     }
 
     /**
+     * 角色更新操作
+     * @param role
+     * @return
+     */
+    @GetMapping("update")
+    @ResponseBody
+    public ResultInfo updateRole(Role role){
+        roleService.updateRole(role);
+        return success("角色更新成功!");
+    }
+
+
+    /**
      * 跳转至添加或修改角色的页面
      * @return
      */
@@ -78,9 +91,5 @@ public class RoleController extends BaseController {
     public String toAddorUpdateRolePage(){
         return "role/add_update";
     }
-
-
-
-
 
 }

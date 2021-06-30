@@ -50,7 +50,6 @@ layui.use(['form', 'layer', 'formSelects'], function () {
         return false;
     });
 
-
     // 添加修改角色页面的close单击按钮事件
     $("#closeBtn").click(function () {
         //当你在iframe页面关闭自身时
