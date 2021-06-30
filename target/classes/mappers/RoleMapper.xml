@@ -121,4 +121,18 @@
         r.is_valid = 1
   </select>
 
+  <!-- 有条件的进行模糊查询，返回的是类型resultType,而不是resuleMap -->
+  <select id="selectByParams" parameterType="com.xxxx.crm.query.RoleQuery" resultType="com.xxxx.crm.vo.Role">
+    select
+        id, role_name, role_remark, create_date, update_date, is_valid
+    from
+        t_role
+    <where>
+        is_valid = 1
+        <if test="null != roleName and roleName != ''">
+          and role_name like concat('%', #{roleName}, '%')
+        </if>
+    </where>
+  </select>
+
 </mapper>
