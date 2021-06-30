@@ -1,5 +1,6 @@
 package com.xxxx.crm.service;
 
+import com.fasterxml.jackson.databind.jsontype.impl.AsExistingPropertyTypeSerializer;
 import com.xxxx.crm.base.BaseService;
 import com.xxxx.crm.dao.RoleMapper;
 import com.xxxx.crm.utils.AssertUtil;
@@ -74,18 +75,48 @@ public class RoleService extends BaseService<Role, Integer> {
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateRole(Role role){
         // 1. 参数校验
-        AssertUtil.isTrue(role.getId() == null, "角色不存在!");
+        AssertUtil.isTrue(role.getId() == null, "待更新记录不存在!");
         // 根据角色的id查询数据库中的用户信息
         Role temp = roleMapper.selectByPrimaryKey(role.getId());
         AssertUtil.isTrue(temp == null, "待更新记录不存在!");
+
+        // 角色名称  非空，角色唯一
         // 判断修改后的角色名称是否存在
-        AssertUtil.isTrue(StringUtils.isBlank(role.getRoleName()), "角色用户名称不能为空!");
-        // 判断修改后的名称是否已存在
-        AssertUtil.isTrue(role.getRoleName().equals(temp.getRoleName()), "角色用户名已存在，请重试!");
+        AssertUtil.isTrue(StringUtils.isBlank(role.getRoleName()), "角色名称不能为空!");
+
+        // 通过角色名称查询角色记录
+        temp = roleMapper.selectByRoleName(role.getRoleName());
+        // 判断修改后的名称是否已存在(排除自己的可能性)
+        AssertUtil.isTrue(temp != null && (temp.getId().equals(temp.getId())), "角色用户名已存在，请重试!");
 
         // 2. 修改参数的默认值
         role.setUpdateDate(new Date());
         // 执行修改的操作
         AssertUtil.isTrue(roleMapper.updateByPrimaryKeySelective(role) < 1, "角色修改失败!");
     }
+
+    /**
+     * 删除角色
+     *  1.参数校验
+     *      角色id  非空，唯一值
+     *  2.设置相关参数的默认值
+     *      是否有效    0（删除记录）修改是否有效
+     *      修改时间    系统默认时间
+     *  3.执行更新操作，判断受影响的行数
+     * @param id
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteRole(Integer id){
+        // 参数校验
+        AssertUtil.isTrue(id == null, "待删除记录不存在!");
+        // 判断数据库中是否有值
+        Role role = roleMapper.selectByPrimaryKey(id);
+        AssertUtil.isTrue(role == null, "待删除记录不存在!");
+        // 修改角色是否有效
+        role.setIsValid(0);
+        role.setUpdateDate(new Date());
+        // 执行删除操作
+        AssertUtil.isTrue(roleMapper.updateByPrimaryKeySelective(role) < 1, "删除角色失败!");
+    }
+
 }

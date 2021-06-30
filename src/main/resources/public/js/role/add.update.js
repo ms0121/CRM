@@ -22,13 +22,23 @@ layui.use(['form', 'layer', 'formSelects'], function () {
         // 数据请求的地址,添加的操作(也就是要把前端填写的数据信息发送到那个请求地址)
         var url = ctx + "/role/add";
 
+        // 数据更新的操作
+        // 根据隐藏域中是否存在id这个值来判断是添加还是修改的操作，id为空，添加操作，id不为空，修改操作
+        var roleId = $("[name='id']").val();
+        if (roleId != null && roleId != ''){
+            // 跳转到更新的请求地址
+            url = ctx + "/role/update";
+        }
+
         /** 发送ajax请求（post方式）
          * url：请求地址
          * data.field：前端页面提交表单的所有数据值，所以要求前后端对应的变量名必须一致，否则无法将其封装在对象中使用
          * result: 返回的结果(来自于调用具体的后端方法的返回值)，当前添加/更新操作返回的是 ResultInfo 类型的结果
          */
         $.post(url, data.field, function (result) {
-            // console.log(result);
+            // 查看前端传递表格中的json数据
+            console.log(data.field);
+
             // alert("执行成功!");
             // 操作成功
             if (result.code == 200) {

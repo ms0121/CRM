@@ -5,6 +5,10 @@
 </head>
 <body class="childrenBody">
 <form class="layui-form" style="width:80%;">
+    <#--
+        隐藏域：用于设置当前编辑的角色id值
+        根据后台设置进入到请求域中的角色信息，使用el表达式进行提取值设置在页面中
+    -->
     <input name="id" type="hidden" value="${(role.id)!}"/>
     <div class="layui-form-item layui-row layui-col-xs12">
         <label class="layui-form-label">角色名</label>

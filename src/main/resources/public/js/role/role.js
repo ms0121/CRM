@@ -74,6 +74,21 @@ layui.use(['table','layer'],function(){
 
 
        /**
+        *  数据表单的行工具栏监听事件，打开导航工具栏：tool(数据表格的lay-filter=""属性值)
+        */
+       table.on('tool(roles)', function(data) {
+              // console.log();
+              if (data.event == "edit"){
+                     // 当前编辑用户的id号
+                     openAddOrUpdateRoleDialog(data.data.id);
+              }else if (data.event == "del"){
+                     // console.log(data.data.id);
+                     deleteRoleDiag(data.data.id);
+              }
+       });
+
+
+       /**
         * 添加按钮
         */
        function openAddOrUpdateRoleDialog(id) {
@@ -85,6 +100,7 @@ layui.use(['table','layer'],function(){
                      title = "<h2 align='center'>角色管理--更新角色</h2>";
                      url +="?id=" + id;
               }
+
               // 页面内打开
               layui.layer.open({
                      type: 2, // 类型
@@ -96,7 +112,48 @@ layui.use(['table','layer'],function(){
        }
 
 
+       /**
+        * 删除指定的用户信息
+        */
+       function deleteRoleDiag(id) {
+              layer.confirm('您确定要删除该记录吗?', {icon:3, title:'角色管理'}, function (index) {
+                     // 关闭弹出框
+                     layer.close(index);
+                     // 执行操作
+                     $.ajax({
+                            type:"post",
+                            data:{
+                                   id:id
+                            },
+                            url:ctx + "/role/delete",
+                            success: function (data) {
+                                   showInfo(data)
+                            }
+                     });
+                     // 跳转到首页
+                     tableIns.reload({
+                            page: {
+                                   curr: 1 //响应之后，设置重新从第 1 页开始显示数据
+                            }
+                     });
+              });
+       }
 
+
+       /**
+        * 发送请求之后的提示信息
+        * @param result
+        */
+       function showInfo(result) {
+              if (result.code == 200){
+                     layer.msg("删除成功", {icon: 6});
+                     // 刷新表格
+                     tableIns.reload();
+              }else {
+                     // 提示失败
+                     layer.msg(result.msg, {icon:5});
+              }
+       }
 
 
 

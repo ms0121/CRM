@@ -6,12 +6,10 @@ import com.xxxx.crm.query.RoleQuery;
 import com.xxxx.crm.service.RoleService;
 import com.xxxx.crm.vo.Role;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -75,20 +73,38 @@ public class RoleController extends BaseController {
      * @param role
      * @return
      */
-    @GetMapping("update")
+    @PostMapping("update")
     @ResponseBody
     public ResultInfo updateRole(Role role){
         roleService.updateRole(role);
         return success("角色更新成功!");
     }
 
+    /**
+     * 角色删除操作
+     * @param id
+     * @return
+     */
+    @PostMapping("delete")
+    @ResponseBody
+    public ResultInfo deleteRole(Integer id){
+        roleService.deleteRole(id);
+        return success("角色删除成功!");
+    }
 
     /**
      * 跳转至添加或修改角色的页面
      * @return
      */
     @GetMapping("toAddorUpdateRolePage")
-    public String toAddorUpdateRolePage(){
+    public String toAddorUpdateRolePage(Integer id, HttpServletRequest request){
+        // 判断是否是更新操作
+        if (id != null){
+            // 查询操作
+            Role role = roleService.selectByPrimaryKey(id);
+            // 将查询的用户设置到请求域中
+            request.setAttribute("role", role);
+        }
         return "role/add_update";
     }
 
