@@ -285,19 +285,26 @@ public class UserService extends BaseService<User, Integer> {
         user.setUpdateDate(new Date());
         // 执行更新的操作
         AssertUtil.isTrue(userMapper.updateByPrimaryKeySelective(user) != 1, "用户更新失败，请重试!");
+        relationUserRole(user.getId(), user.getRoleIds());
     }
 
     /**
      * 删除用户
-     * @param id
+     * @param ids
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteUser(Integer[] id){
-        AssertUtil.isTrue(id == null || id.length == 0, "用户不存在");
-        AssertUtil.isTrue(deleteBatch(id) != id.length, "用户删除失败，请重试!");
+    public void deleteUser(Integer[] ids){
+        AssertUtil.isTrue(ids == null || ids.length == 0, "用户不存在");
+        AssertUtil.isTrue(deleteBatch(ids) != ids.length, "用户删除失败，请重试!");
+        // 遍历删除的用户id
+        for (Integer userId : ids) {
+            // 查询该用户id对应的用户拥有的角色
+            Integer count = userRoleMapper.countUserRoleByUserId(userId);
+            if (count > 0){
+                // 删除所有的对应的用户角色
+                userRoleMapper.deleteUserRoleByUserId(userId);
+            }
+        }
     }
-
-
-
 }
 
