@@ -1,17 +1,16 @@
 package com.xxxx.crm.dao;
 
+import com.xxxx.crm.base.BaseMapper;
+import com.xxxx.crm.model.TreeModel;
 import com.xxxx.crm.vo.Module;
 
-public interface ModuleMapper {
-    int deleteByPrimaryKey(Integer id);
+import java.util.List;
 
-    int insert(Module record);
+public interface ModuleMapper extends BaseMapper<Module, Integer> {
 
-    int insertSelective(Module record);
+    /**
+     * 查询所有的资源列表
+    */
+    public List<TreeModel> queryAllModules();
 
-    Module selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(Module record);
-
-    int updateByPrimaryKey(Module record);
 }

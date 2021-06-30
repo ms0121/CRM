@@ -68,10 +68,15 @@ layui.use(['table','layer'],function(){
                      // console.log("添加");
                      openAddOrUpdateRoleDialog(null);
               }else if (obj.event == "grant"){
-                     console.log("授权");
+                     // 获取被选中的用户信息列表， table.checkStatus("elem"); elem当前表单的id号
+                     // console.log(obj.config.id); // obj.config.id == roleId
+                     // table.checkStatus(obj.config.id); // 获取被选中的数据信息
+                     var checkStatus = table.checkStatus(obj.config.id);
+                     console.log(checkStatus);
+                     // 打开授权的对话框
+                     openAddGrantDialog(checkStatus.data);
               }
        });
-
 
        /**
         *  数据表单的行工具栏监听事件，打开导航工具栏：tool(数据表格的lay-filter=""属性值)
@@ -82,11 +87,10 @@ layui.use(['table','layer'],function(){
                      // 当前编辑用户的id号
                      openAddOrUpdateRoleDialog(data.data.id);
               }else if (data.event == "del"){
-                     // console.log(data.data.id);
+                     // 删除用户信息
                      deleteRoleDiag(data.data.id);
               }
        });
-
 
        /**
         * 添加按钮
@@ -110,7 +114,6 @@ layui.use(['table','layer'],function(){
                      maxmin:true,  // 弹窗的最大最小化
               });
        }
-
 
        /**
         * 删除指定的用户信息
@@ -139,7 +142,6 @@ layui.use(['table','layer'],function(){
               });
        }
 
-
        /**
         * 发送请求之后的提示信息
         * @param result
@@ -155,6 +157,34 @@ layui.use(['table','layer'],function(){
               }
        }
 
+       /**
+        * 打开授权页面
+        * @param id
+        * data：代表的是整个选中的用户信息
+        */
+       function openAddGrantDialog(data) {
+              if (data.length == 0){
+                     layer.msg("请选择要授权的角色!", {icon: 5});
+                     return;
+              }
+              if (data.length > 1){
+                     layer.msg("暂不支持批量角色授权!", {icon:5});
+                     return;
+              }
+              // 向当前的地址发送请求
+              var url = ctx + "/module/toAddGrantPage?roleId="+data[0].id;
+              var title = "<h3>角色管理 - 角色授权</h3>"
+
+              // 打开模态框
+              layui.layer.open({
+                     title: title,
+                     content: url,
+                     type: 2,
+                     area: ["400px", "500px"],
+                     maxmin: true
+              });
+
+       }
 
 
 

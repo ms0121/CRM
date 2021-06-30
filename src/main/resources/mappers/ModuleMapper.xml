@@ -174,4 +174,14 @@
       update_date = #{updateDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!-- 查询所有的资源名称数据信息 -->
+  <select id="queryAllModules"  resultType="com.xxxx.crm.model.TreeModel">
+    select
+        id, parent_id as pId, module_name name
+    from
+        t_module
+    where
+        is_valid = 1
+  </select>
 </mapper>
