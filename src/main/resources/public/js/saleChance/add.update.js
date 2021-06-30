@@ -10,7 +10,6 @@ layui.use(['form', 'layer'], function () {
 
          });
      */
-
     // 提交表单数据
     form.on('submit(addOrUpdateSaleChance)', function (data) {
         // 提交数据时的加载层 （https://layer.layui.com/）
@@ -65,7 +64,7 @@ layui.use(['form', 'layer'], function () {
         //当你在iframe页面关闭自身时
         var index = parent.layer.getFrameIndex(window.name); //先得父窗口内的当前iframe层的索引
         parent.layer.close(index); //在父窗口内再执行关闭
-    })
+    });
 
 
     // 页面加载的时候发起ajax请求，查询所有的销售人员数据数据

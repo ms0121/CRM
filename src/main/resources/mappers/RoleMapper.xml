@@ -135,4 +135,15 @@
     </where>
   </select>
 
+  <select id="selectByRoleName" parameterType="string" resultType="com.xxxx.crm.vo.Role">
+    select
+        <include refid="Base_Column_List"></include>
+    from
+        t_role
+    where
+        is_valid = 1
+    and
+        role_name = #{roleName}
+  </select>
+
 </mapper>

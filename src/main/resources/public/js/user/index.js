@@ -81,6 +81,7 @@ layui.use(['table','layer'],function(){
         }
     });
 
+
     /**
      * 头部工具栏的删除按钮的操作：
      * @param checkData

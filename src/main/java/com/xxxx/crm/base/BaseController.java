@@ -19,7 +19,7 @@ public class BaseController {
     }
 
     public ResultInfo success(String msg){
-        ResultInfo resultInfo= new ResultInfo();
+        ResultInfo resultInfo= new ResultInfo();   // code = 200（默认值）
         resultInfo.setMsg(msg);
         return resultInfo;
 
