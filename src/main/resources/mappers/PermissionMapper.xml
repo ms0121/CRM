@@ -103,4 +103,42 @@
       update_date = #{updateDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!-- 查询当前roleId对应的所有的权限记录信息 -->
+  <select id="countPermissionByRoleId" parameterType="int" resultType="java.lang.Integer">
+    select
+        count(1)
+    from
+        t_permission
+    where
+        role_id = #{roleId}
+  </select>
+
+  <!-- 删除指定roleId对应的所有的权限记录信息 -->
+  <delete id="deletePermissionByRoleId" parameterType="int">
+    delete from
+        t_permission
+    where
+        role_id = #{roleId}
+  </delete>
+
+  <!-- 批量添加权限记录信息 -->
+  <insert id="insertBatch" parameterType="com.xxxx.crm.vo.Permission">
+    insert into
+        t_permission(role_id, module_id, acl_value, create_date, update_date)
+    values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.roleId}, #{item.moduleId}, #{item.aclValue},now(),now())
+        </foreach>
+  </insert>
+
+  <!-- 查询角色拥有的所有的资源id集合 -->
+  <select id="queryRoleHasModuleIdsByRoleId" parameterType="int" resultType="java.lang.Integer">
+    select
+        module_id
+    from
+        t_permission
+    where
+        role_id=#{roleId}
+  </select>
 </mapper>

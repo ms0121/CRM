@@ -133,6 +133,7 @@ layui.use(['table','layer'],function(){
                                    showInfo(data)
                             }
                      });
+
                      // 跳转到首页
                      tableIns.reload({
                             page: {
@@ -184,5 +185,4 @@ layui.use(['table','layer'],function(){
                      maxmin: true
               });
        }
-
 });

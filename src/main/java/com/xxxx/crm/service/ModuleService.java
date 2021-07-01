@@ -24,8 +24,8 @@ public class ModuleService extends BaseService<Module, Integer> {
      * 查询所有的资源列表
      * @return
      */
-    public List<TreeModel> queryAllModules(){
-        return moduleMapper.queryAllModules();
+    public List<TreeModel> queryAllModules(Integer roleId){
+        return moduleMapper.queryAllModules(roleId);
     }
 
 

@@ -183,6 +183,13 @@ layui.use(['table','layer'],function(){
                      area: ["400px", "500px"],
                      maxmin: true
               });
+
+              // 跳转到首页
+              tableIns.reload({
+                     page: {
+                            curr: 1 //响应之后，设置重新从第 1 页开始显示数据
+                     }
+              });
        }
 
 });

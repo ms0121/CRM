@@ -1,6 +1,7 @@
 package com.xxxx.crm.controller;
 
 import com.xxxx.crm.base.BaseController;
+import com.xxxx.crm.dao.PermissionMapper;
 import com.xxxx.crm.model.TreeModel;
 import com.xxxx.crm.service.ModuleService;
 import org.springframework.stereotype.Controller;
@@ -23,14 +24,32 @@ public class ModuleController extends BaseController {
     @Resource
     private ModuleService moduleService;
 
+    @Resource
+    private PermissionMapper permissionMapper;
+
     /**
      * 查询所有的资源列表
      * @return
      */
     @GetMapping("queryAllModules")
     @ResponseBody
-    public List<TreeModel> queryAllModules(){
-        return moduleService.queryAllModules();
+    public List<TreeModel> queryAllModules(Integer roleId){
+        // 查询所有的权限记录
+        List<TreeModel> treeModels = moduleService.queryAllModules(roleId);
+        // 查询指定角色已经被授权过的权限记录id(查询当前角色拥有的资源id)
+        List<Integer> permissionIds = permissionMapper.queryRoleHasModuleIdsByRoleId(roleId);
+        // 遍历treeModels中的哪些权限信息已经被授权
+        if (permissionIds != null && permissionIds.size() > 0){
+            // 循环所有的资源列表，查看哪些是已经被授权的
+            for (TreeModel treeModel : treeModels) {
+                if (permissionIds.contains(treeModel.getId())){
+                    // 如果已经被授权的资源，将其默认选中
+                    treeModel.setChecked(true);
+                }
+            }
+        }
+        // 返回查询的所有资源列表
+        return treeModels;
     }
 
     /**

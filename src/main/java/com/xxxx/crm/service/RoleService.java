@@ -2,8 +2,11 @@ package com.xxxx.crm.service;
 
 import com.fasterxml.jackson.databind.jsontype.impl.AsExistingPropertyTypeSerializer;
 import com.xxxx.crm.base.BaseService;
+import com.xxxx.crm.dao.ModuleMapper;
+import com.xxxx.crm.dao.PermissionMapper;
 import com.xxxx.crm.dao.RoleMapper;
 import com.xxxx.crm.utils.AssertUtil;
+import com.xxxx.crm.vo.Permission;
 import com.xxxx.crm.vo.Role;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +30,13 @@ public class RoleService extends BaseService<Role, Integer> {
 
     @Resource
     private RoleMapper roleMapper;
+
+    @Resource
+    private PermissionMapper permissionMapper;
+
+    @Resource
+    private ModuleMapper moduleMapper;
+
 
     /**
      * 查询所有的角色
@@ -121,11 +132,44 @@ public class RoleService extends BaseService<Role, Integer> {
 
     /**
      * 角色授权
+     *  将对应的角色id与资源id，添加到对应的权限表中
+     *      1. 直接添加权限，不合适，会出现重复的权限数据(执行修改权限操作后删除权限操作时)
+     *      2. 推荐使用：
+     *          先将已有的权限记录删除，再将需要设置的权限记录进行添加
+     *          ①通过角色id查询对应的权限记录
+     *          ②如果权限记录存在，则删除对应的角色拥有的权限记录
+     *          ③如果有权限记录，则添加权限记录
      * @param roleId
      * @param mIds
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void addGrant(Integer roleId, Integer mIds[]) {
+        // ①通过角色id查询对应的权限记录
+        Integer count = permissionMapper.countPermissionByRoleId(roleId);
+        // ②如果权限记录存在，则删除对应的角色拥有的权限记录
+        if (count > 0){
+            // 删除当前角色id对应的权限
+            permissionMapper.deletePermissionByRoleId(roleId);
+        }
+        // ③如果有权限记录，则批量添加权限记录(对象)
+        if (mIds != null && mIds.length > 0){
+            // 将所有的权限对象添加到列表中
+            ArrayList<Permission> permissionArrayList = new ArrayList<>();
 
+            // 遍历创建权限对象
+            for (Integer mId : mIds) {
+                Permission permission = new Permission();
+                permission.setRoleId(roleId);
+                permission.setModuleId(mId);
+                // 设置每个资源对应的opt_value值，
+                permission.setAclValue(moduleMapper.selectByPrimaryKey(mId).getOptValue());
+                permission.setCreateDate(new Date());
+                permission.setUpdateDate(new Date());
+                // 将权限记录对象添加到列表中
+                permissionArrayList.add(permission);
+            }
+            // 批量给角色添加权限的操作
+            AssertUtil.isTrue(permissionMapper.insertBatch(permissionArrayList) != permissionArrayList.size(), "角色授权失败!");
+        }
     }
 }
