@@ -119,8 +119,8 @@ public class RoleController extends BaseController {
     @PostMapping("addGrant")
     @ResponseBody
     public ResultInfo addGrant(Integer roleId, Integer mIds[]){
-//        System.out.println("roleId = " + roleId);
-//        System.out.println("mIds = " + Arrays.asList(mIds));
+        // System.out.println("roleId = " + roleId);
+        // System.out.println("mIds = " + Arrays.asList(mIds));
         roleService.addGrant(roleId, mIds);
         return success("授权成功!");
     }
