@@ -120,7 +120,7 @@ public class RoleService extends BaseService<Role, Integer> {
     }
 
     /**
-     * 给角色进行授权
+     * 角色授权
      * @param roleId
      * @param mIds
      */
