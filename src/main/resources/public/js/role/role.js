@@ -171,7 +171,7 @@ layui.use(['table','layer'],function(){
                      layer.msg("暂不支持批量角色授权!", {icon:5});
                      return;
               }
-              // 向当前的地址发送请求
+              // 向当前的地址发送请求,从而进行跳转页面
               var url = ctx + "/module/toAddGrantPage?roleId="+data[0].id;
               var title = "<h3>角色管理 - 角色授权</h3>"
 
@@ -183,31 +183,6 @@ layui.use(['table','layer'],function(){
                      area: ["400px", "500px"],
                      maxmin: true
               });
-
        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 });

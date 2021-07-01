@@ -119,4 +119,13 @@ public class RoleService extends BaseService<Role, Integer> {
         AssertUtil.isTrue(roleMapper.updateByPrimaryKeySelective(role) < 1, "删除角色失败!");
     }
 
+    /**
+     * 给角色进行授权
+     * @param roleId
+     * @param mIds
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void addGrant(Integer roleId, Integer mIds[]) {
+
+    }
 }

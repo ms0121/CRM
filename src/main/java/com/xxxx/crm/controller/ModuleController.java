@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -32,16 +33,16 @@ public class ModuleController extends BaseController {
         return moduleService.queryAllModules();
     }
 
-
     /**
      * 进入授权页面
      * @param roleId
      * @return
      */
     @GetMapping("toAddGrantPage")
-    public String toAddGrantPage(Integer roleId){
+    public String toAddGrantPage(Integer roleId, HttpServletRequest request){
+        // 将被选中的用户id设置在请求域中，从而传递到前端界面
+        request.setAttribute("roleId", roleId);
         return "role/grant";
     }
-
 
 }

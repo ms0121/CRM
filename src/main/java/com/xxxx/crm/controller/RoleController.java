@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -106,6 +107,22 @@ public class RoleController extends BaseController {
             request.setAttribute("role", role);
         }
         return "role/add_update";
+    }
+
+
+    /**
+     * 角色授权
+     * @param roleId 被授权的用户id
+     * @param mIds 因为传过来的角色资源(mIds)有多个，所以传过来的是一个数组
+     * @return
+     */
+    @PostMapping("addGrant")
+    @ResponseBody
+    public ResultInfo addGrant(Integer roleId, Integer mIds[]){
+//        System.out.println("roleId = " + roleId);
+//        System.out.println("mIds = " + Arrays.asList(mIds));
+        roleService.addGrant(roleId, mIds);
+        return success("授权成功!");
     }
 
 }
