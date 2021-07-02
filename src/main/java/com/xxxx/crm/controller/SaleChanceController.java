@@ -1,5 +1,6 @@
 package com.xxxx.crm.controller;
 
+import com.xxxx.crm.annotation.RequiredPermission;
 import com.xxxx.crm.base.BaseController;
 import com.xxxx.crm.base.ResultInfo;
 import com.xxxx.crm.dao.SaleChanceMapper;
@@ -30,12 +31,13 @@ public class SaleChanceController extends BaseController {
     private SaleChanceService saleChanceService;
 
     /**
-     * 营销机会数据查询，分页多条件查询
+     * 营销机会数据查询，分页多条件查询  101001
      * 要求：如果flag的值不为空，并且值为1，则表示当前查询的是客户开发机会，
      *      否则查询 营销机会数据
      * @param saleChanceQuery
-     * @return
+     * @return 因此，需要去拦截注解，得知状态码，使用aop(面向切面的方法进行获取)，从而就得知该方法上面的状态码
      */
+    @RequiredPermission(code = "101001")
     @RequestMapping("list")
     @ResponseBody
     public Map<String, Object> querySaleChanceByParams(SaleChanceQuery saleChanceQuery,
@@ -54,17 +56,24 @@ public class SaleChanceController extends BaseController {
         return saleChanceService.querySaleChanceByParams(saleChanceQuery);
     }
 
+    /**
+     * 进入营销机会的页面  1010
+     * @return
+     */
+    @RequiredPermission(code = "1010")
     @RequestMapping("index")
     public String index(){
         return "saleChance/sale_chance";
     }
 
+
     /**
-     * 添加营销机会,添加成功之后返回json数据信息
+     * 添加营销机会,添加成功之后返回json数据信息   101002
      * @param saleChance
      * @param request
      * @return
      */
+    @RequiredPermission(code = "101002")
     @PostMapping("add")
     @ResponseBody
     public ResultInfo addSaleChance(SaleChance saleChance, HttpServletRequest request){
@@ -97,10 +106,11 @@ public class SaleChanceController extends BaseController {
 
 
     /**
-     * 更新营销机会,更新成功之后返回json数据信息
+     * 更新营销机会,更新成功之后返回json数据信息  10104
      * @param saleChance
      * @return
      */
+    @RequiredPermission(code = "101004")
     @PostMapping("update")
     @ResponseBody
     public ResultInfo updateSaleChance(SaleChance saleChance){
@@ -111,10 +121,11 @@ public class SaleChanceController extends BaseController {
     }
 
     /**
-     * 营销机会数据删除操作
+     * 营销机会数据删除操作     101003
      * @param ids
      * @return
      */
+    @RequiredPermission(code = "101003")
     @RequestMapping("delete")
     @ResponseBody
     public ResultInfo deleteSaleChance(Integer[] ids){

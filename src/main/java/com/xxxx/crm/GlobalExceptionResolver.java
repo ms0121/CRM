@@ -3,6 +3,7 @@ package com.xxxx.crm;
 import com.alibaba.fastjson.JSON;
 import com.sun.corba.se.spi.ior.IdentifiableFactory;
 import com.xxxx.crm.base.ResultInfo;
+import com.xxxx.crm.exceptions.AuthException;
 import com.xxxx.crm.exceptions.NoLoginException;
 import com.xxxx.crm.exceptions.ParamsException;
 import jdk.nashorn.internal.ir.IfNode;
@@ -59,7 +60,6 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
         }
 
 
-
         /**
          * 设置默认的异常处理（返回视图）
          */
@@ -85,7 +85,13 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
                     // 设置视图异常的信息
                     modelAndView.addObject("code", p.getCode());
                     modelAndView.addObject("msg",p.getMsg());
+                }else if (ex instanceof AuthException){   // 认证异常信息
+                    AuthException p = (AuthException) ex;
+                    // 设置视图异常的信息
+                    modelAndView.addObject("code", p.getCode());
+                    modelAndView.addObject("msg",p.getMsg());
                 }
+
                 // 将ModelAndView进行返回
                 return modelAndView;
 
@@ -99,6 +105,11 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
                 // 判断异常类型是否是自定义类型
                 if (ex instanceof ParamsException){
                     ParamsException p = (ParamsException) ex;
+                    // 设置数据异常的信息
+                    resultInfo.setCode(p.getCode());
+                    resultInfo.setMsg(p.getMsg());
+                } else if (ex instanceof AuthException){  // 认证异常
+                    AuthException p = (AuthException) ex;
                     // 设置数据异常的信息
                     resultInfo.setCode(p.getCode());
                     resultInfo.setMsg(p.getMsg());
