@@ -41,13 +41,14 @@ layui.use(['table', 'treetable'], function () {
         }
     });
 
+
     /**
      * 监听头部工具栏
      */
     table.on('toolbar(munu-table)', function (data) {
         // 判断lay-event属性
         if (data.event == "expand") {
-            // 全部展开
+            // 数据表格全部展开，将当前的表格传入到函数中
             treeTable.expandAll("#munu-table");
 
         } else if (data.event == "fold") {

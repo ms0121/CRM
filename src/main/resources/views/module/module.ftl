@@ -5,15 +5,19 @@
     <#include "../common.ftl">
 </head>
 <body class="childrenBody">
+
+    <#--数据表格-->
     <table id="munu-table" class="layui-table" lay-filter="munu-table"></table>
 
-    <!-- 操作列 -->
+    <!-- 行工具栏。操作列 -->
     <script type="text/html" id="auth-state">
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">添加子项</a>
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
 
+
+    <#-- 头部工具栏   -->
     <script type="text/html" id="toolbarDemo">
         <div class="layui-btn-container">
             <a class="layui-btn layui-btn-normal addNews_btn" lay-event="expand">
