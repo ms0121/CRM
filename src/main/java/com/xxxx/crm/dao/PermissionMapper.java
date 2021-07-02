@@ -15,4 +15,7 @@ public interface PermissionMapper extends BaseMapper<Permission, Integer> {
 
     // 查询当前的roleId拥有的资源id
     List<Integer> queryRoleHasModuleIdsByRoleId(Integer roleId);
+
+    // 通过当前的用户id查询用户拥有的资源权限
+    List<String> queryUserHasPermissionByUserId(Integer id);
 }

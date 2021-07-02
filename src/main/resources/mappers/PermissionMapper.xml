@@ -141,4 +141,19 @@
     where
         role_id=#{roleId}
   </select>
+
+  <!-- 通过id查询用户拥有的权限资源:连表查询，通过结合用户角色表和权限表进行表连接查询即可 -->
+  <select id="queryUserHasPermissionByUserId" parameterType="int" resultType="java.lang.String">
+      select
+          distinct acl_value
+      from
+          t_user_role ur
+      left join
+          t_permission p
+      on
+          ur.role_id = p.`role_id`
+      where
+          ur.`user_id` = #{id};
+  </select>
+
 </mapper>

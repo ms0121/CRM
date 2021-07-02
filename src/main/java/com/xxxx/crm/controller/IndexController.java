@@ -1,8 +1,10 @@
 package com.xxxx.crm.controller;
 
 import com.xxxx.crm.base.BaseController;
+import com.xxxx.crm.service.PermissionService;
 import com.xxxx.crm.service.UserService;
 import com.xxxx.crm.utils.LoginUserUtil;
+import com.xxxx.crm.vo.Permission;
 import com.xxxx.crm.vo.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author lms
@@ -20,6 +23,9 @@ public class IndexController extends BaseController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private PermissionService permissionService;
 
     /**
      * 系统登录页面
@@ -48,6 +54,12 @@ public class IndexController extends BaseController {
         // 根据登录用户的id获取到用户的信息，并把用户信息保存到session中
         User user = userService.selectByPrimaryKey(id);
         request.getSession().setAttribute("user", user);
+
+        // 通过当前登录的用户id查询当前登录用户所拥有的资源列表(查询对应资源的授权码)
+        List<String> permissions = permissionService.queryUserHasPermissionByUserId(id);
+        // System.out.println("permissions = " + permissions);
+        // 将查询得到的权限资源列表设置到session域中
+        request.getSession().setAttribute("permissions",permissions);
         return "main";
     }
 }
