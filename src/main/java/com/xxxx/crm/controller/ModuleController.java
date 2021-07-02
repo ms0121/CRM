@@ -1,5 +1,6 @@
 package com.xxxx.crm.controller;
 
+import com.xxxx.crm.annotation.RequiredPermission;
 import com.xxxx.crm.base.BaseController;
 import com.xxxx.crm.dao.PermissionMapper;
 import com.xxxx.crm.model.TreeModel;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lms
@@ -63,5 +65,25 @@ public class ModuleController extends BaseController {
         request.setAttribute("roleId", roleId);
         return "role/grant";
     }
+
+    /**
+     * 查询module的资源列表数据信息
+     * @return
+     */
+    @GetMapping("list")
+    @ResponseBody
+    public Map<String, Object> queryModuleList(){
+        return moduleService.queryModuleList();
+    }
+
+    /**
+     * 跳转至module资源页面
+     * @return
+     */
+    @GetMapping("index")
+    public String index(){
+        return "module/module";
+    }
+
 
 }

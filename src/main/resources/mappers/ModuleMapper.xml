@@ -184,4 +184,14 @@
     where
         is_valid = 1
   </select>
+
+  <!-- 查询所有的module信息 -->
+  <select id="queryModuleList" resultType="com.xxxx.crm.vo.Module">
+    select
+        <include refid="Base_Column_List"></include>
+    from
+        t_module
+    where
+        is_valid = 1
+  </select>
 </mapper>

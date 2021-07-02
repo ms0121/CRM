@@ -13,4 +13,9 @@ public interface ModuleMapper extends BaseMapper<Module, Integer> {
     */
     public List<TreeModel> queryAllModules(Integer roleId);
 
+    /**
+     * 查询所有的资源信息
+     */
+    public List<Module> queryModuleList();
+
 }

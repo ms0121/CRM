@@ -7,7 +7,9 @@ import com.xxxx.crm.vo.Module;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lms
@@ -28,5 +30,19 @@ public class ModuleService extends BaseService<Module, Integer> {
         return moduleMapper.queryAllModules(roleId);
     }
 
+    /**
+     * 当前查询的数据信息要显示在前端layUi的数据表格中，LayUi数据表格要求的数据形式是Map(string,object)，
+     * 所以返回的数据格式要符合前端的数据形式
+     * @return
+     */
+    public Map<String, Object> queryModuleList(){
+        Map<String, Object> map = new HashMap<>();
+        List<Module> moduleList = moduleMapper.queryModuleList();
+        map.put("code", 0);
+        map.put("msg","");
+        map.put("count", moduleList.size());
+        map.put("data",moduleList);
+        return map;
+    }
 
 }

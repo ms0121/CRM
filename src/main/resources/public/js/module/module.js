@@ -141,5 +141,4 @@ layui.use(['table', 'treetable'], function () {
             });
         });
     }
-    
 });
