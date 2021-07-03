@@ -3,14 +3,18 @@ package com.xxxx.crm.controller;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.xxxx.crm.annotation.RequiredPermission;
 import com.xxxx.crm.base.BaseController;
+import com.xxxx.crm.base.ResultInfo;
 import com.xxxx.crm.dao.PermissionMapper;
 import com.xxxx.crm.model.TreeModel;
 import com.xxxx.crm.service.ModuleService;
+import com.xxxx.crm.utils.AssertUtil;
 import com.xxxx.crm.vo.Module;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -91,34 +95,30 @@ public class ModuleController extends BaseController {
 
 
     /**
-     * 参数校验
-     *  1.参数校验
-     *      模块名称， moduleName
-     *          非空，同一层级下的模块名称唯一
-     *      地址    url
-     *          二级菜单(grade=1),非空并且不可以重复
-     *      父级菜单  parentId
-     *          一级菜单  目录，grade=0，  null
-     *          二级|三级菜单(菜单，按钮grade=1或2)   非空，父级菜单必须存在
-     *      层级  grade
-     *          非空， 0,1 2，
-     *      权限码  optValue
-     *          非空，不可重复
-     *
-     *  2.设置参数的默认值
-     *      是否有效  isValid    1
-     *      创建时间  createDate   系统当前时间
-     *      更新时间  updateDate   系统当前时间
-     *
-     *  3.执行添加操作，判断受影响的行数
-     *
+     * 添加资源
      * @param module
+     * @return
      */
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void addModule(Module module){
-
+    @PostMapping("add")
+    @ResponseBody
+    public ResultInfo addModule(Module module){
+        moduleService.addModule(module);
+        return success("添加资源成功!");
     }
 
 
-
+    /**
+     * 跳转至添加资源的页面，
+     * 并把要添加资源的资源的层级和父菜单码设置到请求域中，从而在添加页面中进行获取
+     * @param grade
+     * @param parentId
+     * @param request
+     * @return
+     */
+    @GetMapping("toAddModulePage")
+    public String toAddModulePage(Integer grade, Integer parentId, HttpServletRequest request){
+        request.setAttribute("grade", grade);
+        request.setAttribute("parentId", parentId);
+        return "module/add";
+    }
 }

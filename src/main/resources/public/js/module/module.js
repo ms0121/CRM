@@ -63,39 +63,42 @@ layui.use(['table', 'treetable'], function () {
 
     /**
      * 监听行工具栏
+     * 点击行工具栏之后，会触发点击事件函数，返回数据信息（用obj接收返回的数据信息）
      */
-    table.on('tool(munu-table)',function (data) {
+    table.on('tool(munu-table)',function (obj) {
+        console.log(obj);
         // 判断lay-event属性
-        if (data.event == "add") {
+        if (obj.event == "add") {
             // 添加子项
             // 判断当前的层级（如果是三级菜单，就不能添加）
-            if (data.data.grade == 2) {
+            if (obj.data.grade == 2) {
                 layer.msg("暂不支持添加四级菜单！",{icon:5});
                 return;
             }
             // 一级|二级菜单   grade=当前层级+1，parentId=当前资源的ID
-            openAddModuleDialog(data.data.grade+1, data.data.id);
+            openAddModuleDialog(obj.data.grade+1, obj.data.id);
 
-        } else if (data.event == "edit") {
+        } else if (obj.event == "edit") {
             // 修改资源
-            openUpdateModuleDialog(data.data.id);
+            openUpdateModuleDialog(obj.data.id);
 
-        } else if (data.event == "del") {
+        } else if (obj.event == "del") {
             // 删除资源
-            deleteModule(data.data.id);
+            deleteModule(obj.data.id);
         }
     });
 
 
     /**
-     * 打开添加资源的对话框
+     * 打开添加资源的对话框，并将层级和父菜单的id传入到添加页面中
      * @param grade 层级
      * @param parentId 父菜单ID
      */
     function openAddModuleDialog(grade, parentId) {
-        var title = "<h3>资源管理 - 添加资源</h3>";
+        var title = "<h3 align='center'>资源管理 - 添加资源</h3>";
         var url = ctx + "/module/toAddModulePage?grade=" + grade + "&parentId=" + parentId;
 
+        // 控制打开的页面的大小，以及设置打开的页面的标题信息
         layui.layer.open({
             type:2,
             title:title,
@@ -104,6 +107,7 @@ layui.use(['table', 'treetable'], function () {
             maxmin:true
         });
     }
+
 
     /**
      * 打开修改资源的对话框

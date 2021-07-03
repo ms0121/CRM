@@ -194,4 +194,37 @@
     where
         is_valid = 1
   </select>
+
+  <!-- 根据层级和模块名称查询资源对象 -->
+  <select id="queryModuleByGradeAndModuleName" resultType="com.xxxx.crm.vo.Module">
+    select
+        <include refid="Base_Column_List"></include>
+    from
+        t_module
+    where
+        is_valid = 1 and grade=#{grade} and module_name=#{moduleName}
+  </select>
+
+
+  <!-- 根据层级和url查询资源对象 -->
+  <select id="queryModuleByGradeAndUrl" resultType="com.xxxx.crm.vo.Module">
+    select
+        <include refid="Base_Column_List"></include>
+    from
+        t_module
+    where
+        is_valid = 1 and grade=#{grade} and url=#{url}
+  </select>
+
+  <!-- 根据权限码查询资源对象 -->
+  <select id="queryModuleByOptValue" resultType="com.xxxx.crm.vo.Module">
+    select
+        <include refid="Base_Column_List"></include>
+    from
+        t_module
+    where
+        is_valid = 1 and opt_value=#{optValue}
+  </select>
+
+
 </mapper>
