@@ -42,4 +42,11 @@ public interface ModuleMapper extends BaseMapper<Module, Integer> {
      * @return
      */
     Module queryModuleByOptValue(@Param("optValue") String optValue);
+
+    /**
+     * 根据父Id查询是否存在子记录
+     * @param id
+     * @return
+     */
+    Integer queryModuleByParentId(Integer id);
 }

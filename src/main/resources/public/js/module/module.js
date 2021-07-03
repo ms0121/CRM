@@ -121,10 +121,11 @@ layui.use(['table', 'treetable'], function () {
             type:2,
             title:title,
             content:url,
-            area:["700px","450px"],
+            area:["500px","450px"],
             maxmin:true
         });
     }
+
 
     /**
      * 删除资源
@@ -132,6 +133,8 @@ layui.use(['table', 'treetable'], function () {
      */
     function deleteModule(id) {
         // 弹出确认框询问用户是否确认删除
+        // data：指定后端调用函数之后的返回值
+        console.log("删除按钮被点击了..............");
         layer.confirm('您确认删除该记录吗？',{icon:3, title:"资源管理"}, function (data) {
             // 如果确认删除，则发送ajax请求
             $.post(ctx+ "/module/delete",{id:id},function (result) {

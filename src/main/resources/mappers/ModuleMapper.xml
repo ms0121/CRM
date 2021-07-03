@@ -226,5 +226,15 @@
         is_valid = 1 and opt_value=#{optValue}
   </select>
 
+  <!-- 当前当前资源id是否存在子记录 -->
+  <select id="queryModuleByParentId" parameterType="int" resultType="java.lang.Integer">
+    select
+        count(1)
+    from
+        t_module
+    where
+        is_valid = 1 and parent_id = #{id}
+  </select>
+
 
 </mapper>

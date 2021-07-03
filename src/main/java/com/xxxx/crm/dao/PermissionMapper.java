@@ -18,4 +18,10 @@ public interface PermissionMapper extends BaseMapper<Permission, Integer> {
 
     // 通过当前的用户id查询用户拥有的资源权限
     List<String> queryUserHasPermissionByUserId(Integer id);
+
+    // 根据资源id查询是否存在数据
+    Integer countPermissionByModuleId(Integer id);
+
+    // 根据资源Id删除指定的权限记录
+    void deletePermissionByModuleId(Integer id);
 }

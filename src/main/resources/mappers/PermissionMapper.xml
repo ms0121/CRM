@@ -156,4 +156,24 @@
           ur.`user_id` = #{id};
   </select>
 
+  <!-- 根据资源id查询关联的权限数据 -->
+  <select id="countPermissionByModuleId" parameterType="int" resultType="java.lang.Integer">
+    select
+        count(1)
+    from
+        t_permission
+    where
+        module_id = #{id}
+  </select>
+
+  <!-- 根据资源ID删除相关联的权限记录 -->
+  <delete id="deletePermissionByModuleId">
+    delete from
+        t_permission
+    where
+        module_id = #{id}
+
+  </delete>
+
+
 </mapper>

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -108,6 +109,30 @@ public class ModuleController extends BaseController {
 
 
     /**
+     * 修改资源
+     * @param module
+     * @return
+     */
+    @PostMapping("update")
+    @ResponseBody
+    public ResultInfo updateModule(Module module){
+        moduleService.updateModule(module);
+        return success("修改资源成功!");
+    }
+
+    /**
+     * 删除资源
+     * @param id
+     * @return
+     */
+    @PostMapping("delete")
+    @ResponseBody
+    public ResultInfo deleteModule(Integer id){
+        moduleService.deleteModule(id);
+        return success("删除资源成功!");
+    }
+
+    /**
      * 跳转至添加资源的页面，
      * 并把要添加资源的资源的层级和父菜单码设置到请求域中，从而在添加页面中进行获取
      * @param grade
@@ -121,4 +146,19 @@ public class ModuleController extends BaseController {
         request.setAttribute("parentId", parentId);
         return "module/add";
     }
+
+
+    /**
+     * 打开修改资源的页面
+     * @param id
+     * @param request
+     * @return
+     */
+    @GetMapping("toUpdateModulePage")
+    public String toUpdateModulePage(Integer id, HttpServletRequest request, Model model){
+        Module module = moduleService.selectByPrimaryKey(id);
+        request.setAttribute("module", module);
+        return "module/update";
+    }
+
 }

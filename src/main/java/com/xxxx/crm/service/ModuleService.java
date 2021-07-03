@@ -3,6 +3,7 @@ package com.xxxx.crm.service;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.xxxx.crm.base.BaseService;
 import com.xxxx.crm.dao.ModuleMapper;
+import com.xxxx.crm.dao.PermissionMapper;
 import com.xxxx.crm.model.TreeModel;
 import com.xxxx.crm.utils.AssertUtil;
 import com.xxxx.crm.vo.Module;
@@ -28,6 +29,10 @@ public class ModuleService extends BaseService<Module, Integer> {
 
     @Resource
     private ModuleMapper moduleMapper;
+
+    @Resource
+    private PermissionMapper permissionMapper;
+
 
     /**
      * 查询所有的资源列表
@@ -133,10 +138,8 @@ public class ModuleService extends BaseService<Module, Integer> {
      *  1.参数校验
      *      id      非空，数据存在
      *      grade   层级，非空，0-1-2
-     *      模块名称   moduleName
-     *          非空，同一层级下的模块名称唯一(不包含当前修改记录本身)
-     *      地址  url
-     *          二级菜单，grade = 1,非空，并且同一层级下不可重复(不包含修改记录本身)
+     *      模块名称   moduleName 非空，同一层级下的模块名称唯一(不包含当前修改记录本身)
+     *      地址  url 二级菜单，grade = 1,非空，并且同一层级下不可重复(不包含修改记录本身)
      *      权限码  optValue  非空，不可重复(不包含修改记录本身)
      *
      *  2.设置默认值
@@ -147,12 +150,81 @@ public class ModuleService extends BaseService<Module, Integer> {
     public void updateModule(Module module){
         // 1.参数校验
         // id 不为空
-        AssertUtil.isTrue(null == module.getId(), "资源不存在!");
+        AssertUtil.isTrue(null == module.getId(), "待更新记录不存在!");
         // id 数据存在
         Module temp = moduleMapper.selectByPrimaryKey(module.getId());
-        AssertUtil.isTrue(temp == null, "资源不存在");
+        AssertUtil.isTrue(temp == null, "待更新记录不存在!");
+
+        // grade   层级，非空，0-1-2
+        Integer grade = module.getGrade();
+        AssertUtil.isTrue(grade == null || !(grade == 0 || grade == 1 || grade == 2), "菜单层级不合法!");
+
+        // 模块名称   moduleName 非空，同一层级下的模块名称唯一(不包含当前修改记录本身)
+        AssertUtil.isTrue(StringUtils.isBlank(module.getModuleName()), "模块名称不能为空!");
+        // 根据模块层级和模块名称查询模块资源
+        temp = moduleMapper.queryModuleByGradeAndModuleName(grade, module.getModuleName());
+        // 同一层级下的模块名称唯一(不包含当前修改记录本身)
+        if (temp != null){
+            AssertUtil.isTrue(!(temp.getId().equals(module.getId())),"该层级下菜单名已存在!");
+        }
+
+        // 地址  url 二级菜单，grade = 1,非空，并且同一层级下不可重复(不包含修改记录本身)
+        if (grade == 1){
+            AssertUtil.isTrue(StringUtils.isBlank(module.getUrl()), "菜单URL不能为空!");
+            temp = moduleMapper.queryModuleByGradeAndUrl(grade, module.getUrl());
+            if (temp != null){
+                AssertUtil.isTrue(!(temp.getId().equals(module.getId())), "该层级下菜单URL已存在!");
+            }
+        }
+
+        // 权限码  optValue  非空，不可重复(不包含修改记录本身)
+        AssertUtil.isTrue(StringUtils.isBlank(module.getOptValue()), "权限码不能为空!");
+        temp = moduleMapper.queryModuleByOptValue(module.getOptValue());
+        if (temp != null){
+            AssertUtil.isTrue(!(temp.getId().equals(module.getId())), "该层级下权限码已存在!");
+        }
+
+        //  2.设置默认值, 设置修改时间为当前的系统时间
+        module.setUpdateDate(new Date());
+
+        //  3，执行修改操作
+        AssertUtil.isTrue(moduleMapper.updateByPrimaryKeySelective(module) < 1, "修改资源失败!");
 
     }
 
 
+    /**
+     * 删除资源
+     *  1.判断删除的记录是否存在
+     *  2.如果当前资源存在子记录，则不可删除
+     *  3.删除资源时，将对应的权限表的记录也删除(判断权限表中是否存在关联数据，如果存在，则删除)
+     *  4.执行删除(更新操作)，判断受影响的行数
+     * @param id
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteModule(Integer id) {
+        // 1.判断删除的记录是否存在
+        AssertUtil.isTrue(id == null, "待删除记录不存在!");
+        Module temp = moduleMapper.selectByPrimaryKey(id);
+        AssertUtil.isTrue(temp == null, "待删除记录不存在!");
+
+        // 2.如果当前资源存在子记录(将当前id当做父ID查询资源记录)，则不可删除
+        Integer count = moduleMapper.queryModuleByParentId(id);
+        AssertUtil.isTrue(count > 0, "该资源存在子记录，不可删除!");
+
+        // 3.删除资源时，将对应的权限表的记录也删除(判断权限表中是否存在关联数据，如果存在，则删除)
+        // 通过资源id查询权限表中是否存在数据
+        count = permissionMapper.countPermissionByModuleId(id);
+        if (count > 0){
+            // 删除指定资源ID的权限记录
+            permissionMapper.deletePermissionByModuleId(id);
+        }
+
+        // 设置记录无效
+        temp.setIsValid((byte) 0);
+        temp.setUpdateDate(new Date());
+
+        // 4.执行删除(更新操作)，判断受影响的行数
+        AssertUtil.isTrue(moduleMapper.updateByPrimaryKeySelective(temp) < 1, "删除资源失败!");
+    }
 }
