@@ -347,4 +347,14 @@
     </where>
   </select>
 
+  <!-- 根据客户名称查询用户对象 -->
+  <select id="queryCustomerByName" parameterType="java.lang.String" resultType="com.xxxx.crm.vo.Customer">
+    select
+        <include refid="Base_Column_List"></include>
+    from
+        t_customer
+    where
+        is_valid = 1 and name = #{name}
+  </select>
+
 </mapper>

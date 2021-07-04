@@ -65,4 +65,72 @@ layui.use(['table','layer',"form"],function(){
 
 
 
+    /**监听表单数据的头部工具栏事件
+     * 语法格式
+     table.on('toolbar(表单数据的lay-filter=""属性值), function(obj){
+
+     })
+     */
+    //触发事件,数据表格的头部工具栏的增加删除按钮事件绑定
+    table.on('toolbar(customers)', function(obj){
+        // obj.event：对应元素上设置的lay-even属性值
+        if (obj.event == "add"){
+            // 添加操作
+            openCustomersDialog(null);
+        }else if (obj.event == "recode"){
+            // 删除操作
+            console.log("recode");
+        }else if (obj.event == "order"){
+            console.log("order");
+        }
+    });
+
+
+
+    //数据表单的行工具栏监听事件，打开导航工具栏  tool(数据表格的lay-filter=""属性值)
+    table.on('tool(customers)', function (data) {
+        if (data.event == 'edit') {
+            var id = data.data.id;
+            // 打开更新营销机会数据的窗口
+            openCustomersDialog(id);
+
+        } else if (data.event == 'del'){
+
+        }
+    });
+
+
+
+
+    // 打开添加/更新的客户数据的窗口
+    // 如果Id为空，表示添加的弹窗
+    // 如果Id不为空，表示更新的弹窗
+    function openCustomersDialog(id) {
+        // 添加数据的标题
+        var title = "<h2 align='center'>客户管理--添加客户</h2>";
+        // 发送请求到这个地址，从而打开添加的页面信息
+        var url = ctx + "/customer/toCustomer";
+
+        // 更新操作
+        if (id != null && id != ''){
+            // 更新数据的标题
+            title = "<h2 align='center'>客户管理--更新客户</h2>";
+            // 更新的请求地址，传入id在后端查询对应的数据信息并返回到前台
+            url = url + "?id=" + id;
+        }
+
+        layui.layer.open({  // 页面内打开
+            type: 2, // 类型
+            title: title,
+            area: ['650px', '500px'], // 宽高
+            content: url,   // 跳转的url地址
+            maxmin:true,  // 弹窗的最大最小化
+        });
+    }
+
+
+
+
+
+
 });

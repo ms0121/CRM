@@ -58,14 +58,12 @@ layui.use(['form', 'layer'], function () {
         return false;
     });
 
-
     // 添加营销机会数据SaleChance弹窗的close单击按钮事件
     $("#closeeBtn").click(function () {
         //当你在iframe页面关闭自身时
         var index = parent.layer.getFrameIndex(window.name); //先得父窗口内的当前iframe层的索引
         parent.layer.close(index); //在父窗口内再执行关闭
     });
-
 
     // 页面加载的时候发起ajax请求，查询所有的销售人员数据数据
     $.ajax({
