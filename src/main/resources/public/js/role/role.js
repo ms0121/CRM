@@ -14,7 +14,7 @@ layui.use(['table','layer'],function(){
               ,elem: '#roleList' // 表示要绑定的是哪个数据表格
               ,height: 'full-125' // 容器的高度
               ,cellMinWidth: 95  // 单元格的最小宽度
-              ,url: ctx + '/role/list' //请求的地址（后台的数据接口）
+              ,url: ctx + '/role/list' //请求的地址（后台的数据接口）即当前表格的数据来源于该请求
               ,limit:5  // 默认每页显示的数据条数
               ,limits:[5,10,20,30,40,50]  // 每页页数的可选择项
               ,page: true //开启分页
