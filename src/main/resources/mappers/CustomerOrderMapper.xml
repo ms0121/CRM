@@ -174,5 +174,16 @@
         co.id = #{orderId}
   </select>
 
+  <!-- 通过客户id查询最后一条订单记录信息 -->
+  <select id="queryLossCustomerOrderByCustomerId" parameterType="int" resultType="com.xxxx.crm.vo.CustomerOrder">
+    select
+        *
+    from
+        t_customer_order
+    where
+        is_valid = 1 and cus_id = 20
+    order by
+        order_date DESC limit 1
+  </select>
 
 </mapper>

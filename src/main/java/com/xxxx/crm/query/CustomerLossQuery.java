@@ -1,0 +1,38 @@
+package com.xxxx.crm.query;
+
+import com.xxxx.crm.base.BaseQuery;
+
+/**
+ * @author lms
+ * @date 2021-07-05 - 20:10
+ */
+public class CustomerLossQuery extends BaseQuery {
+
+    private String cusNo;
+    private String cusName;
+    private Integer state;
+
+    public String getCusNo() {
+        return cusNo;
+    }
+
+    public void setCusNo(String cusNo) {
+        this.cusNo = cusNo;
+    }
+
+    public String getCusName() {
+        return cusName;
+    }
+
+    public void setCusName(String cusName) {
+        this.cusName = cusName;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+}

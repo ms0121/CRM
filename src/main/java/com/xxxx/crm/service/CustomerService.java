@@ -3,11 +3,15 @@ package com.xxxx.crm.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xxxx.crm.base.BaseService;
+import com.xxxx.crm.dao.CustomerLossMapper;
 import com.xxxx.crm.dao.CustomerMapper;
+import com.xxxx.crm.dao.CustomerOrderMapper;
 import com.xxxx.crm.query.CustomerQuery;
 import com.xxxx.crm.utils.AssertUtil;
 import com.xxxx.crm.utils.PhoneUtil;
 import com.xxxx.crm.vo.Customer;
+import com.xxxx.crm.vo.CustomerLoss;
+import com.xxxx.crm.vo.CustomerOrder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,6 +30,12 @@ public class CustomerService extends BaseService<Customer, Integer> {
 
     @Resource
     private CustomerMapper customerMapper;
+
+    @Resource
+    private CustomerOrderMapper customerOrderMapper;
+
+    @Resource
+    private CustomerLossMapper customerLossMapper;
 
 
     /**
@@ -171,6 +181,64 @@ public class CustomerService extends BaseService<Customer, Integer> {
         AssertUtil.isTrue(StringUtils.isBlank(fr), "法人不能为空!");
         AssertUtil.isTrue(StringUtils.isBlank(phone), "手机号码不能为空!");
         AssertUtil.isTrue(!PhoneUtil.isMobile(phone), "手机号码格式不正确!");
+    }
+
+
+    /**
+     * 更新客户的流失状态
+     *  1.查询待流失客户数据
+     *  2.将流失客户数据批量添加到客户流失表中
+     *  3.批量更新客户的流失状态   0 正常客户  1 流失客户
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateCoutomerState(){
+        /* 1. 查询待流失的客户数据 */
+        List<Customer> lossCustomerList = customerMapper.queryLossCustomers();
+
+        /* 2. 将流失客户数据批量添加到客户流失表中 */
+        // 判断流失客户数据是否存在
+        if (lossCustomerList != null && lossCustomerList.size() > 0) {
+            // 定义集合 用来接收流失客户的ID
+            List<Integer> lossCustomerIds = new ArrayList<>();
+            // 定义流失客户的列表
+            List<CustomerLoss> customerLossList = new ArrayList<>();
+            // 遍历查询到的流失客户的数据
+            lossCustomerList.forEach(customer -> {
+                // 定义流失客户对象
+                CustomerLoss customerLoss = new CustomerLoss();
+                // 创建时间  系统当前时间
+                customerLoss.setCreateDate(new Date());
+                // 客户经理
+                customerLoss.setCusManager(customer.getCusManager());
+                // 客户名称
+                customerLoss.setCusName(customer.getName());
+                // 客户编号
+                customerLoss.setCusNo(customer.getKhno());
+                // 是否有效  1=有效
+                customerLoss.setIsValid(1);
+                // 修改时间  系统当前时间
+                customerLoss.setUpdateDate(new Date());
+                // 客户流失状态   0=暂缓流失状态  1=确认流失状态
+                customerLoss.setState(0);
+                // 客户最后下单时间
+                // 通过客户ID查询最后的订单记录（最后一条订单记录）
+                CustomerOrder customerOrder = customerOrderMapper.queryLossCustomerOrderByCustomerId(customer.getId());
+                // 判断客户订单是否存在，如果存在，则设置最后下单时间
+                if (customerOrder != null) {
+                    customerLoss.setLastOrderTime(customerOrder.getOrderDate());
+                }
+                // 将流失客户对象设置到对应的集合中
+                customerLossList.add(customerLoss);
+
+                // 将流失客户的ID设置到对应的集合中
+                lossCustomerIds.add(customer.getId());
+            });
+            // 批量添加流失客户记录
+            AssertUtil.isTrue(customerLossMapper.insertBatch(customerLossList) != customerLossList.size(), "客户流失数据转移失败！");
+
+            /* 3. 批量更新客户的流失状态 */
+            AssertUtil.isTrue(customerMapper.updateCustomerStateByIds(lossCustomerIds) != lossCustomerIds.size(), "客户流失数据转移失败！");
+        }
     }
 
 }

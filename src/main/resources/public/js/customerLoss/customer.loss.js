@@ -31,67 +31,54 @@ layui.use(['table','layer',"form"],function(){
 
 
     /**
-     * 搜索按钮的点击事件
+     * 当点击搜索按钮的时候进行查询数据信息，给搜索按钮绑定单击事件
      */
     $(".search_btn").click(function () {
-
-        /**
-         * 表格重载
-         *  多条件查询
-         */
+        // 将搜索的内容显示在当前数据表中
         tableIns.reload({
-            // 设置需要传递给后端的参数
-            where: { //设定异步数据接口的额外参数，任意设
-                // 通过文本框，设置传递的参数
-                customerName: $("[name='cusName']").val() // 客户名称
-                ,customerNo: $("[name='cusNo']").val() // 客户编号
-                ,state:$("#state").val() // 流失状态
+            // where填写的是从前端获取对应的文本数据，并把它们传入到后端给对应的参数名的参数赋值
+            // （传给的是controller中的参数对象对应的变量）
+            where: { //设定异步数据接口的额外参数，任意设置
+                cusNo: $("input[name='cusNo']").val(),
+                cusName: $("input[name='cusName']").val(),
+                state: $("#state").val(),
             }
             ,page: {
-                curr: 1 // 重新从第 1 页开始
+                curr: 1 //响应之后，设置重新从第 1 页开始显示数据
             }
         });
-
     });
 
-
-    /**
-     * 监听行工具栏
-     */
-    table.on('tool(customerLosses)',function (data) {
-        if (data.event == "add") { // 添加暂缓
-
-            // 打开添加暂缓的页面
-            openCustomerLossDialog("<h3>流失管理 - 暂缓措施维护</h3>", data.data.id);
-
-        } else if (data.event == "info") { // 详情
-
-            // 打开详情页面
-            openCustomerLossDialog("<h3>流失管理 - 暂缓措施查看</h3>", data.data.id);
-
+    //数据表单的行工具栏监听事件，打开导航工具栏  tool(数据表格的lay-filter=""属性值)
+    table.on('tool(customerLosses)', function (data) {
+        var id = data.data.id;
+        if (data.event == 'add') {
+            // 打开客户流失添加的数据窗口
+            infoCustomerLoss(id);
+        } else if (data.event == 'info'){
+            infoCustomerLoss(id);
         }
     });
 
+
     /**
-     * 打开添加暂缓/详情页面
-     * @param title
-     * @param lossId
+     * 显示详情信息
+     * @param id
      */
-    function openCustomerLossDialog(title, lossId) {
-        layui.layer.open({
-            // 类型
-            type: 2,
-            // 标题
+    function infoCustomerLoss(id) {
+        // 显示详情数据的标题
+        var title = "<h2 align='center'>客户流失管理--客户详情</h2>";
+        // 发送请求到这个地址，从而打开添加的页面信息
+        var url = ctx + "/customerLoss/customer_rep?id=" + id;
+
+        layui.layer.open({  // 页面内打开
+            type: 2, // 类型
             title: title,
-            // 宽高
-            area: ['700px', '500px'],
-            // url地址
-            content: ctx + "/customer_loss/toCustomerLossPage?lossId=" + lossId,
-            // 可以最大化与最小化
-            maxmin:true
+            area: ['650px', '500px'], // 宽高
+            content: url,   // 跳转的url地址
+            maxmin:true,  // 弹窗的最大最小化
         });
     }
-
 
 
 });
