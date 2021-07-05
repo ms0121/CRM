@@ -49,7 +49,7 @@ layui.use(['table','layer'],function(){
                 // 标题
                 title: title,
                 // 宽高
-                area: ['700px', '400px'],
+                area: ['600px', '400px'],
                 // url地址
                 content: url,
                 // 可以最大化与最小化
@@ -57,7 +57,5 @@ layui.use(['table','layer'],function(){
             });
         }
     });
-
-
 
 });

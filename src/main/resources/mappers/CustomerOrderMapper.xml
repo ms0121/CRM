@@ -138,4 +138,41 @@
       is_valid = #{isValid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!-- 多条件查询客户订单数据信息 -->
+  <select id="selectByParams" parameterType="com.xxxx.crm.query.CustomerOrderQuery"
+          resultType="com.xxxx.crm.vo.CustomerOrder">
+    select
+        <include refid="Base_Column_List"></include>
+    from
+        t_customer_order
+    <where>
+        is_valid = 1
+        <if test="cusId != null and cusId != ''">
+          and cus_id = #{cusId}
+        </if>
+    </where>
+  </select>
+
+  <!-- 根据roleId查询订单详情信息 -->
+  <select id="queryOrderDetailByRoleId" parameterType="int" resultType="java.util.Map">
+    SELECT
+	    co.id, co.order_no, co.address, SUM(od.sum) total,
+	CASE
+		WHEN co.`state` = 1 THEN '已支付'
+		WHEN co.`state` = 0 THEN '未支付'
+	END AS 'status'
+    FROM
+        t_customer_order co
+    LEFT JOIN
+        t_order_details od
+    ON
+        co.id = od.order_id
+    WHERE
+        co.is_valid = 1
+    AND
+        co.id = #{orderId}
+  </select>
+
+
 </mapper>

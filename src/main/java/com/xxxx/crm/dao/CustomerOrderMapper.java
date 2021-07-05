@@ -1,17 +1,12 @@
 package com.xxxx.crm.dao;
 
+import com.xxxx.crm.base.BaseMapper;
 import com.xxxx.crm.vo.CustomerOrder;
 
-public interface CustomerOrderMapper {
-    int deleteByPrimaryKey(Integer id);
+import java.util.Map;
 
-    int insert(CustomerOrder record);
+public interface CustomerOrderMapper extends BaseMapper<CustomerOrder, Integer> {
 
-    int insertSelective(CustomerOrder record);
-
-    CustomerOrder selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(CustomerOrder record);
-
-    int updateByPrimaryKey(CustomerOrder record);
+    // 根据roleId查询订单详情信息
+    Map<String, Object> queryOrderDetailByRoleId(Integer roleId);
 }

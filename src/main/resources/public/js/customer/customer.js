@@ -173,7 +173,7 @@ layui.use(['table','layer',"form"],function(){
             title: title,
             content: url,
             type: 2,
-            area: ["600px", "450px"],
+            area: ['680px', '450px'],
             maxmin: true
         });
     }
