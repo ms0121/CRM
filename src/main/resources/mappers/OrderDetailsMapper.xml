@@ -149,4 +149,15 @@
       update_date = #{updateDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!-- 根据订单id查询订单详情数据 -->
+  <select id="selectByParams" parameterType="int" resultType="java.util.Map">
+      select
+        <include refid="Base_Column_List"></include>
+      from
+        t_order_details
+      where
+        is_valid = 1 and order_id=#{orderId}
+  </select>
+
 </mapper>
