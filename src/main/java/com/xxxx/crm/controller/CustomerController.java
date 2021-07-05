@@ -73,7 +73,6 @@ public class CustomerController extends BaseController {
         return success("客户添加成功!");
     }
 
-
     /**
      * 更新客户信息
      * @param customer
@@ -85,5 +84,32 @@ public class CustomerController extends BaseController {
         customerService.updateCustomer(customer);
         return success("客户更新成功!");
     }
+
+    /**
+     * 删除客户信息
+     * @param id
+     * @return
+     */
+    @PostMapping("delete")
+    @ResponseBody
+    public ResultInfo deleteCustomer(Integer id){
+        System.out.println("id = " + id);
+        customerService.deleteCustomer(id);
+        return success("客户删除成功!");
+    }
+
+    /**
+     * 打开订单页面
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping("toCustomerOrderPage")
+    public String toCustomerOrderPage(Integer id, HttpServletRequest request){
+        Customer customer = customerService.selectByPrimaryKey(id);
+        request.setAttribute("customer", customer);
+        return "customer/customer_order";
+    }
+
 
 }

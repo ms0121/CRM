@@ -132,6 +132,32 @@ public class CustomerService extends BaseService<Customer, Integer> {
 
 
     /**
+     * 删除（实际上为更新的操作）客户信息
+     * 1.参数校验
+     *      id 非空， 数据存在
+     * 2.设置默认值
+     *
+     * 3.执行删除(修改操作)
+     *
+     * @param id
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteCustomer(Integer id){
+        // 1. 参数校验
+        AssertUtil.isTrue(id == null, "待删除记录不存在!");
+        Customer temp = customerMapper.selectByPrimaryKey(id);
+        AssertUtil.isTrue(temp == null, "待删除记录不存在!");
+
+        // 2. 设置默认值
+        temp.setIsValid(0);
+        temp.setUpdateDate(new Date());
+
+        // 3.执行删除的操作
+        AssertUtil.isTrue(customerMapper.updateByPrimaryKeySelective(temp) < 1, "删除客户失败!");
+    }
+
+
+    /**
      * 参数校验
      *      客户名称  name  非空，值唯一
      *      法人代表  fr  非空
