@@ -3,7 +3,6 @@ package com.xxxx.crm.dao;
 import com.xxxx.crm.base.BaseMapper;
 import com.xxxx.crm.vo.Customer;
 
-import javax.swing.*;
 import java.util.List;
 
 public interface CustomerMapper extends BaseMapper<Customer, Integer> {

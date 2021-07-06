@@ -188,7 +188,7 @@
           and cus_name like concat('%',#{cusName}, '%')
         </if>
         <if test="state != null and state != ''">
-          and state = #{cusNo}
+          and state = #{state}
         </if>
     </where>
   </select>

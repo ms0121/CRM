@@ -51,12 +51,13 @@ layui.use(['table','layer',"form"],function(){
 
     //数据表单的行工具栏监听事件，打开导航工具栏  tool(数据表格的lay-filter=""属性值)
     table.on('tool(customerLosses)', function (data) {
+        // data为整个页面的所有数据线信息
         var id = data.data.id;
         if (data.event == 'add') {
             // 打开客户流失添加的数据窗口
-            infoCustomerLoss(id);
+            addCustomerLoss(id);
         } else if (data.event == 'info'){
-            infoCustomerLoss(id);
+            layer.msg("暂不支持查看详情!", {icon: 6});
         }
     });
 
@@ -65,11 +66,11 @@ layui.use(['table','layer',"form"],function(){
      * 显示详情信息
      * @param id
      */
-    function infoCustomerLoss(id) {
+    function addCustomerLoss(id) {
         // 显示详情数据的标题
-        var title = "<h2 align='center'>客户流失管理--客户详情</h2>";
+        var title = "<h2 align='center'>客户流失管理--暂缓管理</h2>";
         // 发送请求到这个地址，从而打开添加的页面信息
-        var url = ctx + "/customerLoss/customer_rep?id=" + id;
+        var url = ctx + "/customer_loss/customer_rep?id=" + id;
 
         layui.layer.open({  // 页面内打开
             type: 2, // 类型

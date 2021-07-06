@@ -47,7 +47,7 @@ public class CustomerLossController extends BaseController {
     }
 
     /**
-     * 打开客户流失详情页面
+     * 打开客户暂缓页面
      * @return
      */
     @RequestMapping("customer_rep")

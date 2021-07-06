@@ -6,7 +6,7 @@ layui.use(['table','layer',"form"],function(){
     // 暂缓列表展示
     var  tableIns = table.render({
         elem: '#customerRepList',
-        url : ctx+'/customer_rep/list?lossId='+$("input[name='id']").val(),
+        url : ctx+'/customer_rep/list?lossId=' + $("input[name='id']").val(),
         cellMinWidth : 95,
         page : true,
         height : "full-125",
@@ -24,25 +24,23 @@ layui.use(['table','layer',"form"],function(){
         ]]
     });
 
-    //
-    //
-    // /**
-    //  * 监听头部工具栏
-    //  */
-    // table.on('toolbar(customerReps)', function (data) {
-    //     if (data.event == "add") { // 添加暂缓操作
-    //
-    //         // 打开添加/更新暂缓数据的页面
-    //         openAddOrUpdateCustomerReprDialog();
-    //
-    //     } else if (data.event == "confirm") {
-    //
-    //         // 更新流失客户的流失状态
-    //         updateCustomerLossState();
-    //     }
-    // });
-    //
-    //
+
+
+    /**
+     * 监听头部工具栏
+     */
+    table.on('toolbar(customerReps)', function (data) {
+        if (data.event == "add") { // 添加暂缓操作
+            // 打开添加/更新暂缓数据的页面
+            openAddOrUpdateCustomerReprDialog();
+
+        } else if (data.event == "confirm") {
+            // 更新流失客户的流失状态
+            updateCustomerLossState();
+        }
+    });
+
+
     // /**
     //  * 监听行工具栏
     //  */
@@ -60,34 +58,34 @@ layui.use(['table','layer',"form"],function(){
     // });
     //
     //
-    // /**
-    //  * 打开添加/更新暂缓数据的页面
-    //  */
-    // function openAddOrUpdateCustomerReprDialog(id) {
-    //     var title = "<h3>暂缓管理 - 添加暂缓数据</h3>";
-    //     var url = ctx + "/customer_rep/toAddOrUpdateCustomerReprPage?lossId=" + $("[name='id']").val();
-    //
-    //     // 判断id如果不为空，则表示更新操作
-    //     if (id != null && id != "") {
-    //         title = "<h3>暂缓管理 - 更新暂缓数据</h3>";
-    //         url += "&id="+ id;
-    //     }
-    //
-    //     // iframe层
-    //     layui.layer.open({
-    //         // 类型
-    //         type: 2,
-    //         // 标题
-    //         title: title,
-    //         // 宽高
-    //         area: ['500px', '220px'],
-    //         // url地址
-    //         content: url,
-    //         // 可以最大化与最小化
-    //         maxmin:true
-    //     });
-    // }
-    //
+    /**
+     * 打开添加/更新暂缓数据的页面
+     */
+    function openAddOrUpdateCustomerReprDialog(id) {
+        var title = "<h3>暂缓管理 - 添加暂缓数据</h3>";
+        var url = ctx + "/customer_rep/toAddOrUpdateCustomerReprPage?lossId=" + $("[name='id']").val();
+
+        // 判断id如果不为空，则表示更新操作
+        if (id != null && id != "") {
+            title = "<h3>暂缓管理 - 更新暂缓数据</h3>";
+            url += "&id="+ id;
+        }
+
+        // iframe层
+        layui.layer.open({
+            // 类型
+            type: 2,
+            // 标题
+            title: title,
+            // 宽高
+            area: ['500px', '220px'],
+            // url地址
+            content: url,
+            // 可以最大化与最小化
+            maxmin:true
+        });
+    }
+
     // /**
     //  * 删除暂缓数据
     //  * @param id
