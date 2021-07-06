@@ -5,6 +5,7 @@
 </head>
 <body class="childrenBody">
 <form class="layui-form" style="width:80%;">
+    <#-- 接收客户流失的lossId   -->
     <input name="lossId" type="hidden" value="${lossId!}"/>
     <input name="id" type="hidden" value="${(customerRep.id)!}"/>
     <div class="layui-form-item layui-row layui-col-xs12">
@@ -21,7 +22,7 @@
             <button class="layui-btn layui-btn-lg" lay-submit=""
                     lay-filter="addOrUpdateCustomerRep">确认
             </button>
-            <button class="layui-btn layui-btn-lg layui-btn-normal">取消</button>
+            <button class="layui-btn layui-btn-lg layui-btn-normal" id="closeBtn">取消</button>
         </div>
     </div>
 </form>

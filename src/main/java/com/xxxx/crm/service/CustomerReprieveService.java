@@ -9,7 +9,10 @@ import com.xxxx.crm.query.CustomerReprieveQuery;
 import com.xxxx.crm.utils.AssertUtil;
 import com.xxxx.crm.vo.CustomerLoss;
 import com.xxxx.crm.vo.CustomerReprieve;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -67,6 +70,7 @@ public class CustomerReprieveService extends BaseService<CustomerReprieve, Integ
      *  3.执行添加操作，判断受影响的行数
      * @param customerReprieve
      */
+    @Transactional(propagation = Propagation.REQUIRED)
     public void addCustomerRep(CustomerReprieve customerReprieve) {
         /*1.参数校验*/
         checkParams(customerReprieve.getLossId(), customerReprieve.getMeasure());
@@ -82,7 +86,7 @@ public class CustomerReprieveService extends BaseService<CustomerReprieve, Integ
     }
 
     // 参数校验
-    private void checkParams(Integer lossId, String measure) {
+    public void checkParams(Integer lossId, String measure) {
         /*1.参数校验*/
         // 流失客户id(lossId)    非空
         AssertUtil.isTrue(lossId == null, "数据不存在!");
@@ -104,6 +108,7 @@ public class CustomerReprieveService extends BaseService<CustomerReprieve, Integ
      *  3.执行修改操作，判断受影响的行数
      * @param customerReprieve
      */
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateCustomerRep(CustomerReprieve customerReprieve) {
         /*1.参数校验*/
         AssertUtil.isTrue(customerReprieve.getId() == null, "暂缓数据不存在!");
@@ -119,4 +124,28 @@ public class CustomerReprieveService extends BaseService<CustomerReprieve, Integ
                 "暂缓数据更新失败!");
 
     }
+
+    /**
+     * 删除暂缓数据
+     *  1.参数检验，判断id是否为空，且数据存在
+     *  2.设置isValid为0,以及更新的时间
+     *  3.执行更新操作，判断受影响的行数
+     * @param id
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteCustomerRep(Integer id) {
+        /* 1.参数检验，判断id是否为空，且数据存在*/
+        AssertUtil.isTrue(id == null, "待删除暂缓数据不存在!");
+        CustomerReprieve customerReprieve = customerReprieveMapper.selectByPrimaryKey(id);
+        AssertUtil.isTrue(customerReprieve == null, "待删除暂缓数据不存在!");
+
+        /*2.设置isValid为0*/
+        customerReprieve.setIsValid(0);
+        customerReprieve.setUpdateDate(new Date());
+
+        /* 3.执行更新操作，判断受影响的行数*/
+        AssertUtil.isTrue(customerReprieveMapper.updateByPrimaryKeySelective(customerReprieve) < 1,
+                "删除暂缓数据失败!");
+    }
+
 }

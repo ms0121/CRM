@@ -8,6 +8,8 @@ import com.xxxx.crm.service.CustomerReprieveService;
 import com.xxxx.crm.vo.CustomerReprieve;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -39,13 +41,16 @@ public class CustomerReprieveController extends BaseController {
 
     /**
      * 打开添加暂缓数据表
-     * @param lossId
+     * @param lossId 将客户流失的id号设置到添加更新的页面中
      * @return
      */
     @RequestMapping("toAddOrUpdateCustomerReprPage")
-    public String toAddOrUpdateCustomerReprPage(Integer lossId, Model model){
-        CustomerReprieve customerRep = customerReprieveService.selectByPrimaryKey(lossId);
-        model.addAttribute("customerRep", customerRep);
+    public String toAddOrUpdateCustomerReprPage(Integer lossId, Model model, Integer id){
+        model.addAttribute("lossId", lossId);
+        if (id != null){
+            CustomerReprieve customerReprieve = customerReprieveService.selectByPrimaryKey(id);
+            model.addAttribute("customerRep", customerReprieve);
+        }
         return "customerLoss/customer_rep_add_update";
     }
 
@@ -53,23 +58,33 @@ public class CustomerReprieveController extends BaseController {
      * 添加暂缓数据功能
      * @param customerReprieve
      */
+    @RequestMapping("add")
+    @ResponseBody
     public ResultInfo addCustomerRep(CustomerReprieve customerReprieve){
         customerReprieveService.addCustomerRep(customerReprieve);
-        return success("成功添加客户暂缓!");
+        return success("成功添加暂缓数据!");
     }
-
 
     /**
      * 更新暂缓数据功能
      * @param customerReprieve
      */
+    @RequestMapping("update")
+    @ResponseBody
     public ResultInfo updateCustomerRep(CustomerReprieve customerReprieve){
         customerReprieveService.updateCustomerRep(customerReprieve);
-        return success("成功更新客户暂缓");
+        return success("成功更新暂缓数据!");
     }
 
-
-
-
-
+    /**
+     * 删除暂缓数据信息
+     * @param id
+     * @return
+     */
+    @PostMapping("delete")
+    @ResponseBody
+    public ResultInfo deleteCustomerRep(Integer id){
+        customerReprieveService.deleteCustomerRep(id);
+        return success("成功删除暂缓数据!");
+    }
 }

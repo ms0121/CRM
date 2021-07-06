@@ -1,12 +1,14 @@
 package com.xxxx.crm.controller;
 
 import com.xxxx.crm.base.BaseController;
+import com.xxxx.crm.base.ResultInfo;
 import com.xxxx.crm.query.CustomerLossQuery;
 import com.xxxx.crm.query.CustomerOrderQuery;
 import com.xxxx.crm.service.CustomerLossService;
 import com.xxxx.crm.vo.CustomerLoss;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -56,6 +58,19 @@ public class CustomerLossController extends BaseController {
         System.out.println("customerLoss = " + customerLoss);
         model.addAttribute("customerLoss", customerLoss);
         return "customerLoss/customer_rep";
+    }
+
+    /**
+     * 确认暂缓数据流失功能
+     * @param id
+     * @param lossReason
+     * @return
+     */
+    @PostMapping("updateCustomerLossStateById")
+    @ResponseBody
+    public ResultInfo updateCustomerLossStateById(Integer id, String lossReason){
+        customerLossService.updateCustomerLossStateById(id, lossReason);
+        return success("确认客户流失成功!");
     }
 
 

@@ -46,7 +46,6 @@ layui.use(['form', 'layer'], function () {
                 layer.msg(result.msg, {icon:5});
             }
         });
-
         // 阻止表单提交
         return false;
     });
