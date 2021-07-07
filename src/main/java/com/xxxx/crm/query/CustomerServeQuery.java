@@ -11,7 +11,9 @@ public class CustomerServeQuery extends BaseQuery {
 
     private String customer;
 
-    private String type;
+    private Integer type;
+
+    private String state;
 
     public String getCustomer() {
         return customer;
@@ -21,11 +23,19 @@ public class CustomerServeQuery extends BaseQuery {
         this.customer = customer;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

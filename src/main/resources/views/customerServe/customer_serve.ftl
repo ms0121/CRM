@@ -30,9 +30,12 @@
         </form>
 
     </blockquote>
+
+    <#--  数据表格  -->
     <table id="customerServeList" class="layui-table"  lay-filter="customerServes"></table>
 
 
+    <#-- 头部工具栏   -->
     <script type="text/html" id="toolbarDemo">
         <a class="layui-btn layui-btn-normal addNews_btn" lay-event="add">
             <i class="layui-icon">&#xe608;</i>

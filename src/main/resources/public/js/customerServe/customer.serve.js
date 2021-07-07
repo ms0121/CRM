@@ -6,8 +6,7 @@ layui.use(['table','layer',"form"],function(){
     //服务列表展示
     var tableIns = table.render({
         elem: '#customerServeList',
-        // url : ctx+'/customer_serve/list?state=fw_001',
-        url: ctx+'/customer_serve/list',
+        url : ctx+'/customer_serve/list?state=fw_001',
         cellMinWidth : 95,
         page : true,
         height : "full-125",
@@ -45,5 +44,36 @@ layui.use(['table','layer',"form"],function(){
         });
     });
 
+    /**监听表单数据的头部工具栏事件
+     * 语法格式
+     table.on('toolbar(表单数据的lay-filter=""属性值), function(obj){
+
+     })
+     */
+    //触发事件,数据表格的头部工具栏的增加删除按钮事件绑定
+    table.on('toolbar(customerServes)', function(obj){
+        // obj.event：对应元素上设置的lay-even属性值
+        if (obj.event == "add"){
+            // 添加操作
+            openCustomerServeDialog();
+        }
+    });
+
+
+    // 打开添加的客户数据的窗口
+    function openCustomerServeDialog() {
+        // 添加数据的标题
+        var title = "<h2 align='center'>客户服务--添加服务</h2>";
+        // 发送请求到这个地址，从而打开添加的页面信息
+        var url = ctx + "/customer_serve/toAddCustomerServe";
+
+        layui.layer.open({  // 页面内打开
+            type: 2, // 类型
+            title: title,
+            area: ['650px', '500px'], // 宽高
+            content: url,   // 跳转的url地址
+            maxmin:true,  // 弹窗的最大最小化
+        });
+    }
 
 });

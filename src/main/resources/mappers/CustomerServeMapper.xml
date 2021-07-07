@@ -245,9 +245,13 @@
       <if test="customer != null and customer != ''">
         and  customer like concat('%', #{customer},'%')
       </if>
-      <if test="type != null and type != ''">
+      <if test="type != null">
         and  serve_type = #{type}
       </if>
+      <if test="state != null and state != ''">
+        and  state = #{state}
+      </if>
+
     </where>
   </select>
 
