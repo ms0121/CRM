@@ -4,14 +4,15 @@ layui.use(['table','layer',"form"],function(){
         table = layui.table;
 
     //服务列表展示
-    table.render({
+    var tableIns = table.render({
         elem: '#customerServeList',
-        url : ctx+'/customer_serve/list?state=fw_001',
+        // url : ctx+'/customer_serve/list?state=fw_001',
+        url: ctx+'/customer_serve/list',
         cellMinWidth : 95,
         page : true,
         height : "full-125",
-        limits : [10,15,20,25],
-        limit : 10,
+        limits : [5,10,15,20,25],
+        limit : 5,
         toolbar: "#toolbarDemo",
         id : "customerServeListTable",
         cols : [[
@@ -26,58 +27,23 @@ layui.use(['table','layer',"form"],function(){
         ]]
     });
 
-    // 多条件搜索
-    $(".search_btn").on("click",function(){
-        table.reload("customerServeListTable",{
-            page: {
-                curr: 1 //重新从第 1 页开始
-            },
-            where: {
-                customer: $("input[name='customer']").val(),  // 客户名
-                serveType: $("#type").val()  // 服务类型
+    /**
+     * 当点击搜索按钮的时候进行查询数据信息，给搜索按钮绑定单击事件
+     */
+    $(".search_btn").click(function () {
+        // 将搜索的内容显示在当前数据表中
+        tableIns.reload({
+            // where填写的是从前端获取对应的文本数据，并把它们传入到后端给对应的参数名的参数赋值
+            // （传给的是controller中的参数对象对应的变量）
+            where: { //设定异步数据接口的额外参数，任意设置
+                customer: $("input[name='customer']").val(),
+                type: $("#type").val(),
             }
-        })
-    });
-
-
-    /**
-     * 监听头部工具栏
-     */
-    table.on('toolbar(customerServes)', function (data) {
-
-        if (data.event == "add") { // 添加服务信息
-
-            // 打开添加服务信息的对话框
-            openAddCustomerServeDialog();
-
-        }
-
-    });
-
-    /**
-     * 打开添加服务信息的对话框
-     */
-    function openAddCustomerServeDialog() {
-        var title = "<h3>服务管理 - 创建服务</h3>";
-        var url = ctx + "/customer_serve/toAddCustomerServePage";
-
-        // iframe层
-        layui.layer.open({
-            // 类型
-            type: 2,
-            // 标题
-            title: title,
-            // 宽高
-            area: ['700px', '500px'],
-            // url地址
-            content: url,
-            // 可以最大化与最小化
-            maxmin:true
+            ,page: {
+                curr: 1 //响应之后，设置重新从第 1 页开始显示数据
+            }
         });
-    }
-
-
-
+    });
 
 
 });
