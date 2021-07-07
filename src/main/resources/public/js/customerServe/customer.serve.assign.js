@@ -63,7 +63,7 @@ layui.use(['table','layer',"form"],function(){
      * 打开服务分配对话框
      */
     function openCustomerServeAssignDialog(id) {
-        var title = "<h3>服务管理 - 服务分配</h3>";
+        var title = "<h3 align='center'>服务管理 - 服务分配</h3>";
         var url = ctx + "/customer_serve/toCustomerServeAssignPage?id="+id;
 
         // iframe层
@@ -80,9 +80,6 @@ layui.use(['table','layer',"form"],function(){
             maxmin:true
         });
     }
-
-    
-
 
 
 });

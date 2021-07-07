@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.xxxx.crm.base.BaseService;
 import com.xxxx.crm.dao.CustomerMapper;
 import com.xxxx.crm.dao.CustomerServeMapper;
+import com.xxxx.crm.dao.UserMapper;
 import com.xxxx.crm.enums.CustomerServeStatus;
 import com.xxxx.crm.query.CustomerServeQuery;
 import com.xxxx.crm.utils.AssertUtil;
@@ -35,6 +36,9 @@ public class CustomerServeService extends BaseService<CustomerServe, Integer> {
 
     @Resource
     private CustomerMapper customerMapper;
+
+    @Resource
+    private UserMapper userMapper;
 
 
     /**
@@ -95,5 +99,69 @@ public class CustomerServeService extends BaseService<CustomerServe, Integer> {
 
         /*3.执行添加操作*/
         AssertUtil.isTrue(customerServeMapper.insertSelective(customerServe) < 1, "服务添加失败!");
+    }
+
+    /**
+     * 服务分配/服务处理/服务反馈
+     *  1.参数校验与设置参数的默认值
+     *      客户服务ID
+     *          非空， 记录必须存在
+     *      客户服务状态
+     *          如果服务状态为  服务分配状态   fw_002
+     *              分配人     非空，分配用户记录存在
+     *              分配时间   系统当前时间
+     *              更新时间   系统当前时间
+     *
+     *          如果服务状态为  服务处理状态   fw_003
+     *              服务处理内容  非空
+     *              服务处理时间    系统当前时间
+     *              更新时间     系统当前时间
+     *
+     *          如果服务状态为  服务反馈状态   fw_004
+     *              服务反馈内容  非空
+     *              服务满意度   非空
+     *              更新时间    系统当前时间
+     *              服务状态    设置为服务归档装填 fw_005
+     *
+     *  2.执行更新操作。判断受影响的行数
+     * @param customerServe
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateCustomerServeState(CustomerServe customerServe){
+        /* 客户服务ID 非空， 记录必须存在*/
+        AssertUtil.isTrue(customerServe.getId() == null ||
+                customerServeMapper.selectByPrimaryKey(customerServe.getId()) == null, "待更新记录不存在!");
+
+        /*判断客户的服务状态*/
+        if (CustomerServeStatus.ASSIGNED.getState().equals(customerServe.getState())) {
+            // 服务分配状态
+            // 分配人     非空，分配用户(当前登录用户)记录存在
+            AssertUtil.isTrue(customerServe.getAssigner() == null, "待分配用户不能为空!");
+            AssertUtil.isTrue(userMapper.selectByPrimaryKey(
+                    Integer.parseInt(customerServe.getAssigner())) == null, "待分配用户不存在!");
+            // 分配时间   系统当前时间
+            customerServe.setAssignTime(new Date());
+
+        }else if (CustomerServeStatus.PROCED.getState().equals(customerServe.getState())){
+            //  服务处理状态
+            //  服务处理内容  非空
+            AssertUtil.isTrue(StringUtils.isBlank(customerServe.getServiceProce()), "服务处理内容不能为空!");
+            //  服务处理时间    系统当前时间
+            customerServe.setServiceProceTime(new Date());
+
+        }else if (CustomerServeStatus.FEED_BACK.getState().equals(customerServe.getState())){
+            // 服务反馈状态
+            // 服务反馈内容  非空
+            AssertUtil.isTrue(StringUtils.isBlank(customerServe.getServiceProceResult()), "服务反馈内容不能为空!");
+            // 服务满意度   非空
+            AssertUtil.isTrue(StringUtils.isBlank(customerServe.getMyd()), "服务满意度不能为空!");
+            // 服务状态    设置为服务归档装填 fw_005
+            customerServe.setState(CustomerServeStatus.ARCHIVED.getState());
+        }
+        // 更新时间   系统当前时间
+        customerServe.setUpdateDate(new Date());
+
+        /*2.执行更新操作。判断受影响的行数*/
+        AssertUtil.isTrue(customerServeMapper.updateByPrimaryKeySelective(customerServe) < 1, "服务更新失败!");
     }
 }

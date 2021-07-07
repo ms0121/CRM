@@ -15,4 +15,8 @@ public interface UserMapper extends BaseMapper<User, Integer> {
     // 查询所有的销售人员
     List<Map<String, Object>> queryAllSales();
 
+    // 查询的所有的客户经理
+    List<Map<String, Object>> queryAllCustomerManagers();
+
+
 }
