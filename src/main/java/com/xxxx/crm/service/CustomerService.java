@@ -265,4 +265,33 @@ public class CustomerService extends BaseService<Customer, Integer> {
         return map;
     }
 
+    /**
+     * 查询客户的构成
+     * @return
+     */
+    public Map<String,Object> countCustomerMake(){
+        HashMap<String, Object> map = new HashMap<>();
+        // 查询所有的客户level以及对应的数量
+        List<Map<String, Object>> dataList = customerMapper.countCustomerMake();
+        // 分别将客户level和对应的数量设置在两个列表中
+        ArrayList<String> data1 = new ArrayList<>();
+        ArrayList<Integer> data2 = new ArrayList<>();
+
+        // 判断数据列表，循环设置数据信息
+        if (dataList != null && dataList.size() > 0){
+            // 循环进行遍历
+            dataList.forEach(m -> {
+                // 获取level中对应的数据，设置到X轴的集合中
+                data1.add(m.get("level").toString());
+                // 获取count中对应的数据，设置到y轴的集合中
+                data2.add(Integer.parseInt(m.get("total").toString()));
+            });
+        }
+        // 将X轴和y轴的数据设置在map中
+        map.put("data1", data1);
+        map.put("data2", data2);
+
+        return map;
+    }
+
 }

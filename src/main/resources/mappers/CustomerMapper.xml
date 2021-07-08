@@ -452,4 +452,19 @@
         total desc
   </select>
 
+<!-- 查询客户构成 -->
+  <select id="countCustomerMake" resultType="map">
+    SELECT
+	    level, COUNT(1) total
+    FROM
+        t_customer
+    WHERE
+        is_valid = 1
+    AND
+        state = 0
+    GROUP BY
+        level;
+  </select>
+
+
 </mapper>

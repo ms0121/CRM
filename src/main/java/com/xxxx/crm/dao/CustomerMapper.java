@@ -20,4 +20,8 @@ public interface CustomerMapper extends BaseMapper<Customer, Integer> {
 
     // 查询客户贡献度
     List<Map<String, Object>> queryCustomerContributionByParams(CustomerQuery customerQuery);
+
+    // 查询客户的构成
+    List<Map<String, Object>> countCustomerMake();
+
 }

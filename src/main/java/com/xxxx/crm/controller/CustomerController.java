@@ -121,4 +121,15 @@ public class CustomerController extends BaseController {
     public Map<String, Object> queryCustomerContributionByParams(CustomerQuery customerQuery){
         return customerService.queryCustomerContributionByParams(customerQuery);
     }
+
+    /**
+     * 查询的客户的构成
+     * @return
+     */
+    @RequestMapping("countCustomerMake")
+    @ResponseBody
+    public Map<String, Object> countCustomerMake(){
+        return customerService.countCustomerMake();
+    }
+
 }
