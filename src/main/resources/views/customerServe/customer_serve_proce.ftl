@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>服务分配</title>
+    <title>服务处理</title>
     <#include "../common.ftl">
 </head>
 <body class="childrenBody">
@@ -37,11 +37,11 @@
     </script>
 
     <script id="customerServeListBar" type="text/html">
-       <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-xs"  lay-event="assign">分配</a>
+       <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-xs"  lay-event="proce">处理</a>
     </script>
 
 </form>
-<script type="text/javascript" src="${ctx}/js/customerServe/customer.serve.assign.js"></script>
+<script type="text/javascript" src="${ctx}/js/customerServe/customer.serve.proce.js"></script>
 
 </body>
 </html>

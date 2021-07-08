@@ -16,8 +16,8 @@ layui.use(['table','layer',"form","laydate"],function(){
         cellMinWidth : 95,
         page : true,
         height : "full-125",
-        limits : [10,15,20,25],
-        limit : 10,
+        limits : [5,10,15,20,25],
+        limit : 5,
         id : "customerContriListTable",
         cols : [[
             {type: "checkbox", fixed:"left", width:50},

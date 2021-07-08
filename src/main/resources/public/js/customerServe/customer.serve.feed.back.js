@@ -39,7 +39,7 @@ layui.use(['table','layer',"form"],function(){
             },
             where: {
                 customer: $("input[name='customer']").val(),  //客户名
-                serveType: $("#type").val()  //服务类型
+                type: $("#type").val()  //服务类型
             }
         })
     });
@@ -63,7 +63,7 @@ layui.use(['table','layer',"form"],function(){
      * 打开服务反馈对话框
      */
     function openCustomerServeFeedBackDialog(id) {
-        var title = "<h3>服务管理 - 服务反馈</h3>";
+        var title = "<h3 align='center'>服务管理 - 服务反馈</h3>";
         var url = ctx + "/customer_serve/toCustomerServeFeedBackPage?id="+id;
 
         // iframe层

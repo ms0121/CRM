@@ -28,7 +28,6 @@ layui.use(['form', 'layer'], function () {
                         // 设置下拉选项
                         opt = "<option value='"+data[i].id+"'>"+data[i].uname+"</option>";
                     }
-
                     // 将下拉项设置到下拉框中
                     $("#assigner").append(opt);
                 }
@@ -79,6 +78,7 @@ layui.use(['form', 'layer'], function () {
         // 阻止表单提交
         return false;
     });
+
 
     /**
      * 关闭弹出层

@@ -56,6 +56,7 @@ layui.use(['form', 'layer','jquery_cookie'], function () {
 
         // 设置处理人
         data.field.serviceProcePeople = $.cookie("trueName");
+
         // 得到所有的表单元素的值
         var formData = data.field;
 

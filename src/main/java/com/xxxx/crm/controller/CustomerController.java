@@ -111,5 +111,14 @@ public class CustomerController extends BaseController {
         return "customer/customer_order";
     }
 
-
+    /**
+     * 客户贡献分析
+     * @param customerQuery
+     * @return
+     */
+    @RequestMapping("queryCustomerContributionByParams")
+    @ResponseBody
+    public Map<String, Object> queryCustomerContributionByParams(CustomerQuery customerQuery){
+        return customerService.queryCustomerContributionByParams(customerQuery);
+    }
 }

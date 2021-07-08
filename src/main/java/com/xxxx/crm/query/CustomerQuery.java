@@ -13,6 +13,25 @@ public class CustomerQuery extends BaseQuery {
     private String customerNo;
     private String level;
 
+    private String time;
+    private Integer type;
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public String getCustomerName() {
         return customerName;
     }

@@ -1,6 +1,7 @@
 package com.xxxx.crm.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -23,6 +24,8 @@ public class CustomerServe {
     private String assigner;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    // 如果前台传过来的是一个字符串，则将字符串转为Date日期格式让后台进行接收
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date assignTime;
 
     private String serviceProce;
@@ -30,6 +33,8 @@ public class CustomerServe {
     private String serviceProcePeople;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    // 如果前台传过来的是一个字符串，则将字符串转为Date日期格式让后台进行接收
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date serviceProceTime;
 
     private String serviceProceResult;
@@ -39,9 +44,13 @@ public class CustomerServe {
     private Integer isValid;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    // 如果前台传过来的是一个字符串，则将字符串转为Date日期格式让后台进行接收
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    // 如果前台传过来的是一个字符串，则将字符串转为Date日期格式让后台进行接收
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 
     public Integer getId() {

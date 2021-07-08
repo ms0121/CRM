@@ -14,7 +14,8 @@ public class CusDevPlan {
 
     //@DateTimeFormat:如果传入的参数是Date类型，要求传入的时间字符号串的格式
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    // 如果前台传过来的是一个字符串，则将字符串转为Date日期格式让后台进行接收
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date planDate;
 
     private String exeAffect;

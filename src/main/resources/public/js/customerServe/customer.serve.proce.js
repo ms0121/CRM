@@ -37,7 +37,7 @@ layui.use(['table','layer',"form"],function(){
             },
             where: {
                 customer: $("input[name='customer']").val(),  // 客户名
-                serveType: $("#type").val()  // 服务类型
+                type: $("#type").val()  // 服务类型
             }
         })
     });
@@ -61,7 +61,7 @@ P
      * 打开服务分处理对话框
      */
     function openCustomerServeProceDialog(id) {
-        var title = "<h3>服务管理 - 服务处理</h3>";
+        var title = "<h3 align='center'>服务管理 - 服务处理</h3>";
         var url = ctx + "/customer_serve/toCustomerServeProcePage?id="+id;
 
         // iframe层

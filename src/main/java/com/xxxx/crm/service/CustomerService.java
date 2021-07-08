@@ -241,4 +241,28 @@ public class CustomerService extends BaseService<Customer, Integer> {
         }
     }
 
+    /**
+     * 查询客户的贡献度
+     * @param customerQuery
+     * @return
+     */
+    public Map<String, Object> queryCustomerContributionByParams(CustomerQuery customerQuery){
+        HashMap<String, Object> map = new HashMap<>();
+        // 开启分页(设置起始页和每页的size)
+        PageHelper.startPage(customerQuery.getPage(), customerQuery.getLimit());
+        // 查询所有的customer的数据信息，按条件查询数据(数据封装在PageInfo对象中)
+        List<Map<String, Object>> maps = customerMapper.queryCustomerContributionByParams(customerQuery);
+        // 将需要分页的数据列表传入到PageInfo中，得到对应的分页对象(就可以从pageInfo对象中拿取分页数，起始页等等)
+        PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(maps);
+
+        // 设置layui表单数据需要后台传过来的是map形式的数据
+        map.put("code", 0);
+        map.put("msg", "success");
+        // 数据的总条数
+        map.put("count", pageInfo.getTotal());
+        // 设置分页好的列表
+        map.put("data", pageInfo.getList());
+        return map;
+    }
+
 }

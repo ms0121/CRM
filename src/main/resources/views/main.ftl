@@ -155,7 +155,7 @@
                         <#if permissions?seq_contains("4060")>
                             <dd>
                                 <a href="javascript:;" class="layui-menu-tips" data-type="tabAdd" data-tab-mpi="m-p-i-10" data-tab="report/3"
-                                   target="_self"><i class="fa fa-tachometer"></i><span class="layui-left-nav"> 客户类别分析</span></a>
+                                   target="_self"><i class="fa fa-tachometer"></i><span class="layui-left-nav"> 客户流失分析</span></a>
                             </dd>
                         </#if>
                     </dl>

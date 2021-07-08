@@ -4,6 +4,7 @@ import com.xxxx.crm.base.BaseController;
 import com.xxxx.crm.base.ResultInfo;
 import com.xxxx.crm.query.CustomerServeQuery;
 import com.xxxx.crm.service.CustomerServeService;
+import com.xxxx.crm.utils.LoginUserUtil;
 import com.xxxx.crm.vo.CustomerServe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.jws.WebParam;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -39,11 +40,11 @@ public class CustomerServeController extends BaseController {
         }else if (type == 2){
             return "customerServe/customer_serve_assign";
         }else if (type == 3){
-            return "customerServe/customer_serve";
+            return "customerServe/customer_serve_proce";
         }else if (type == 4){
-            return "customerServe/customer_serve";
+            return "customerServe/customer_serve_feed_back";
         }else if (type == 5){
-            return "customerServe/customer_serve";
+            return "customerServe/customer_serve_archive";
         }else {
             return "";
         }
@@ -56,7 +57,12 @@ public class CustomerServeController extends BaseController {
      */
     @RequestMapping("list")
     @ResponseBody
-    public Map<String, Object> queryCustomerServeByParams(CustomerServeQuery customerServeQuery){
+    public Map<String, Object> queryCustomerServeByParams(CustomerServeQuery customerServeQuery, Integer flag,
+                                                          HttpServletRequest request){
+        if (flag != null && flag == 1){
+            // 从请求中获取当前的登录用户编号
+            customerServeQuery.setAssigner(LoginUserUtil.releaseUserIdFromCookie(request));
+        }
         return customerServeService.queryCustomerServeByParams(customerServeQuery);
     }
 
@@ -109,4 +115,32 @@ public class CustomerServeController extends BaseController {
         model.addAttribute("customerServe", customerServe);
         return "customerServe/customer_serve_assign_add";
     }
+
+
+    /**
+     * 打开服务处理的对话框
+     * @param id
+     * @return
+     */
+    @RequestMapping("toCustomerServeProcePage")
+    public String toCustomerServeProcePage(Integer id, Model model){
+        CustomerServe customerServe = customerServeService.selectByPrimaryKey(id);
+        model.addAttribute("customerServe", customerServe);
+        return "customerServe/customer_serve_proce_add";
+    }
+
+    /**
+     * 打开服务反馈的对话框
+     * @param id
+     * @return
+     */
+    @RequestMapping("toCustomerServeFeedBackPage")
+    public String toCustomerServeFeedBackPage(Integer id, Model model){
+        CustomerServe customerServe = customerServeService.selectByPrimaryKey(id);
+        model.addAttribute("customerServe", customerServe);
+        return "customerServe/customer_serve_feed_back_add";
+    }
+
+
+
 }

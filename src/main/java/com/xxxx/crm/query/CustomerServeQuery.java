@@ -15,6 +15,17 @@ public class CustomerServeQuery extends BaseQuery {
 
     private String state;
 
+    // 设置分配人
+    private Integer assigner;
+
+    public Integer getAssigner() {
+        return assigner;
+    }
+
+    public void setAssigner(Integer assigner) {
+        this.assigner = assigner;
+    }
+
     public String getCustomer() {
         return customer;
     }
