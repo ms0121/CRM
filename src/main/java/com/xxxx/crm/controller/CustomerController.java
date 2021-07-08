@@ -123,7 +123,7 @@ public class CustomerController extends BaseController {
     }
 
     /**
-     * 查询的客户的构成
+     * 查询的客户的构成(折线图)
      * @return
      */
     @RequestMapping("countCustomerMake")
@@ -131,5 +131,16 @@ public class CustomerController extends BaseController {
     public Map<String, Object> countCustomerMake(){
         return customerService.countCustomerMake();
     }
+
+    /**
+     * 查询的客户的构成(饼状图)
+     * @return
+     */
+    @RequestMapping("countCustomerMake02")
+    @ResponseBody
+    public Map<String, Object> countCustomerMake02(){
+        return customerService.countCustomerMake02();
+    }
+
 
 }

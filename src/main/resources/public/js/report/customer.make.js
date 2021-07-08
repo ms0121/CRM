@@ -8,7 +8,7 @@ layui.use(['layer','echarts'], function () {
     $.ajax({
         type:"get",
         url:ctx + "/customer/countCustomerMake",
-        dataType:"json",
+        dataType:"json", // 返回数据类型为json格式，data为调用countCustomerMake请求返回的函数值
         success:function (data) {
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('make'));

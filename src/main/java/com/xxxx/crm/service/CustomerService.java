@@ -266,7 +266,7 @@ public class CustomerService extends BaseService<Customer, Integer> {
     }
 
     /**
-     * 查询客户的构成
+     * 查询客户的构成(折线图)
      * @return
      */
     public Map<String,Object> countCustomerMake(){
@@ -290,6 +290,41 @@ public class CustomerService extends BaseService<Customer, Integer> {
         // 将X轴和y轴的数据设置在map中
         map.put("data1", data1);
         map.put("data2", data2);
+
+        return map;
+    }
+
+
+    /**
+     * 查询客户的构成(饼状图)
+     * @return
+     */
+    public Map<String, Object> countCustomerMake02() {
+        Map<String, Object> map = new HashMap<>();
+        // 查询客户构成数据的列表
+        List<Map<String,Object>> dataList = customerMapper.countCustomerMake();
+        // 饼状图数据   数组（数组中是字符串）
+        List<String> data1 = new ArrayList<>();
+        // 饼状图的数据  数组（数组中是对象）
+        List<Map<String, Object>> data2 = new ArrayList<>();
+
+        // 判断数据列表 循环设置数据
+        if (dataList != null && dataList.size() > 0) {
+            // 遍历集合
+            dataList.forEach(m -> {
+                // 饼状图数据   数组（数组中是字符串）
+                data1.add(m.get("level").toString());
+                // 饼状图的数据  数组（数组中是对象）
+                Map<String,Object> dataMap = new HashMap<>();
+                dataMap.put("name", m.get("level"));
+                dataMap.put("value", m.get("total"));
+                data2.add(dataMap);
+            });
+        }
+
+        // 将X轴的数据集合与Y轴的数据集合，设置到map中
+        map.put("data1",data1);
+        map.put("data2",data2);
 
         return map;
     }

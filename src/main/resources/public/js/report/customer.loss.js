@@ -9,8 +9,8 @@ layui.use(['table','layer',"form"],function(){
         cellMinWidth : 95,
         page : true,
         height : "full-125",
-        limits : [10,15,20,25],
-        limit : 10,
+        limits : [5,10,15,20,25],
+        limit : 5,
         toolbar: "#toolbarDemo",
         id : "customerLossListTable",
         cols : [[
@@ -37,8 +37,8 @@ layui.use(['table','layer',"form"],function(){
             // 设置需要传递给后端的参数
             where: { //设定异步数据接口的额外参数，任意设
                 // 通过文本框，设置传递的参数
-                customerName: $("[name='cusName']").val() // 客户名称
-                ,customerNo: $("[name='cusNo']").val() // 客户编号
+                cusName: $("[name='cusName']").val() // 客户名称
+                ,cusNo: $("[name='cusNo']").val() // 客户编号
             }
             ,page: {
                 curr: 1 // 重新从第 1 页开始
