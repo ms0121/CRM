@@ -8,6 +8,9 @@
   <artifactId>crm</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <!-- 项目打包上线使用的是war包，但是springboot默认打的是jar包，所以进行修改,打包类型 -->
+  <packaging>war</packaging>
+
   <name>crm</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
@@ -26,7 +29,7 @@
   </parent>
 
   <dependencies>
-    <!-- 排除内部Tomcat的影响 -->
+    <!-- springboot自带tomcat，所以项目在打包上线使用的时候需要排除内部Tomcat的影响 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
@@ -69,7 +72,7 @@
       <version>1.2.13</version>
     </dependency>
 
-    <!-- 打包上线时需要忽略配置文件中的mysql -->
+    <!-- 打包上线时需要忽略配置文件中的mysql,打包时忽略，但是因为docker的mysql为8，所以没问题 -->
     <!-- mysql -->
     <dependency>
       <groupId>mysql</groupId>
@@ -111,6 +114,7 @@
 
     <!-- 设置构建的war文件的名称 -->
     <finalName>crm</finalName>
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
