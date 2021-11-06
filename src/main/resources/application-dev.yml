@@ -1,6 +1,6 @@
 ## 端口号  上下文路径,访问页面的路径设置
 server:
-  port: 8080
+#  port: 8080
   servlet:
     context-path: /crm
 
@@ -9,9 +9,9 @@ spring:
   datasource:
     type: com.mchange.v2.c3p0.ComboPooledDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/crm?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.115.129:3306/crm?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
     username: root
-    password:
+    password: 123456
 
   ## freemarker
   freemarker:

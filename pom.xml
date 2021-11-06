@@ -9,7 +9,7 @@
   <version>1.0-SNAPSHOT</version>
 
   <!-- 项目打包上线使用的是war包，但是springboot默认打的是jar包，所以进行修改,打包类型 -->
-  <packaging>war</packaging>
+<!--  <packaging>war</packaging>-->
 
   <name>crm</name>
   <!-- FIXME change it to the project's website -->
@@ -30,11 +30,11 @@
 
   <dependencies>
     <!-- springboot自带tomcat，所以项目在打包上线使用的时候需要排除内部Tomcat的影响 -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.boot</groupId>-->
+<!--      <artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--      <scope>provided</scope>-->
+<!--    </dependency>-->
 
     <!-- web 环境 -->
     <dependency>
