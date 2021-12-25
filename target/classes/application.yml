@@ -1,0 +1,4 @@
+#表示使用的是上线的配置文件
+spring:
+  profiles:
+    active: dev
